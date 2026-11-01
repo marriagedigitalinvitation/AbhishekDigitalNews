@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="hi" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Abhishek Digital News – Pro Studio Suite APK</title>
+  <title>Abhishek Digital News – v5.0 Ultimate TV PCR Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
-      background-color: #090d16;
+      background-color: #04070f;
       color: #f8fafc;
       overscroll-behavior: none;
       user-select: none;
@@ -19,429 +19,1033 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    canvas { touch-action: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
 
-  <!-- TOP STUDIO HEADER -->
-  <header class="bg-slate-900/95 border-b border-slate-800 px-3 py-2.5 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-30 backdrop-blur">
+  <!-- ================= TOP ULTIMATE PCR HEADER ================= -->
+  <header class="bg-slate-900/95 border-b border-slate-800 px-3 py-2 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-40 backdrop-blur">
     <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center font-black text-white shadow-lg shadow-red-600/30 text-sm">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center font-black text-white shadow-lg shadow-red-600/30 text-xs">
         ADN
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white">ABHISHEK DIGITAL NEWS</h1>
-          <span id="apkBadge" class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">PRO APK</span>
+        <div class="flex items-center gap-1.5">
+          <h1 class="font-black text-sm sm:text-base tracking-tight text-white">ABHISHEK DIGITAL NEWS</h1>
+          <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500 to-red-500 text-slate-950">v5.0 ULTIMATE</span>
         </div>
-        <p class="text-[11px] text-slate-400">Abhishek Kumar Sah • Raxaul, Bihar • 720p HD Compositor</p>
+        <p class="text-[11px] text-slate-400">Abhishek Kumar Sah • Raxaul, Bihar • Virtual Chroma & Debate PCR</p>
       </div>
     </div>
 
-    <!-- REC STATUS & QUICK CONTROLS -->
-    <div class="flex items-center gap-2">
+    <!-- MASTER BROADCAST ACTION BAR -->
+    <div class="flex flex-wrap items-center gap-1.5">
       <div id="recIndicator" class="hidden items-center gap-1.5 bg-red-950/90 border border-red-500/50 px-2.5 py-1 rounded-full">
-        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+        <span id="recDot" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
         <span id="recTimer" class="mono text-xs font-bold text-red-200">00:00</span>
       </div>
 
-      <button id="btnStartCams" class="bg-blue-600 hover:bg-blue-500 active:scale-95 transition text-white font-bold text-xs px-3 py-2 rounded-lg shadow">
-        📷 Start Camera
+      <button id="btnAspect" class="bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 font-bold text-xs px-2.5 py-2 rounded-lg transition">
+        📺 16:9 YouTube
       </button>
-      <button id="btnFlipCam" class="bg-slate-800 hover:bg-slate-700 active:scale-95 transition text-slate-200 font-semibold text-xs px-3 py-2 rounded-lg border border-slate-700">
-        🔄 Flip Front/Rear
+
+      <button id="btnToggleCam" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition text-white font-bold text-xs px-3 py-2 rounded-lg shadow">
+        📷 Start Cam
       </button>
+
+      <button id="btnFlipCam" class="bg-slate-800 hover:bg-slate-700 active:scale-95 transition text-slate-200 font-semibold text-xs px-2.5 py-2 rounded-lg border border-slate-700">
+        🔄 Flip
+      </button>
+
+      <button id="btnMirrorCam" class="bg-slate-800 hover:bg-slate-700 active:scale-95 transition text-slate-200 font-semibold text-xs px-2.5 py-2 rounded-lg border border-slate-700">
+        🪞 Mirror
+      </button>
+
+      <button id="btnTorch" class="bg-slate-800 hover:bg-slate-700 active:scale-95 transition text-amber-300 font-semibold text-xs px-2.5 py-2 rounded-lg border border-slate-700">
+        🔦 Torch
+      </button>
+
+      <button id="btnCountdownIntro" class="bg-sky-600 hover:bg-sky-500 active:scale-95 transition text-white font-extrabold text-xs px-2.5 py-2 rounded-lg shadow" title="5-Second TV Countdown Intro">
+        🎬 5s Intro
+      </button>
+
+      <button id="btnFlashBreaking" class="bg-amber-600 hover:bg-amber-500 active:scale-95 transition text-white font-extrabold text-xs px-2.5 py-2 rounded-lg shadow">
+        🚨 FLASH
+      </button>
+
+      <button id="btnOutroSlate" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold text-xs px-2.5 py-2 rounded-lg">
+        🏁 End Slate
+      </button>
+
+      <button id="btnSnapshot" class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition text-white font-bold text-xs px-2.5 py-2 rounded-lg shadow">
+        📸 Snap
+      </button>
+
+      <button id="btnPauseRec" class="hidden bg-amber-600 hover:bg-amber-500 active:scale-95 transition text-white font-bold text-xs px-2.5 py-2 rounded-lg shadow">
+        ⏸ Pause
+      </button>
+
       <button id="btnRecord" class="bg-red-600 hover:bg-red-500 active:scale-95 transition text-white font-extrabold text-xs px-3.5 py-2 rounded-lg shadow-lg shadow-red-600/30">
         ⏺ REC
       </button>
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE -->
-  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 p-3 max-w-[1600px] w-full mx-auto">
+  <!-- ================= MAIN PCR WORKSPACE ================= -->
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 p-3 max-w-[1650px] w-full mx-auto">
 
-    <!-- LEFT/TOP: LIVE COMPOSITED BROADCAST MONITOR -->
+    <!-- LEFT COLUMN: LIVE MONITOR, TELESTRATOR PEN, CHROMA KEY & MEDIA DECK -->
     <section class="lg:col-span-7 flex flex-col gap-3">
-      <div class="relative bg-black rounded-xl overflow-hidden border border-slate-800 shadow-2xl aspect-video w-full">
-        <!-- 1280x720 HD Broadcast Canvas -->
-        <canvas id="broadcastCanvas" width="1280" height="720" class="w-full h-full object-contain"></canvas>
+
+      <!-- LIVE COMPOSITED CANVAS MONITOR (SUPPORTS TOUCH DRAWING TELESTRATOR) -->
+      <div class="relative bg-black rounded-xl overflow-hidden border border-slate-800 shadow-2xl w-full flex items-center justify-center" style="min-height: 290px; max-height: 520px;">
+        <canvas id="broadcastCanvas" width="1280" height="720" class="max-w-full max-h-[500px] object-contain cursor-crosshair"></canvas>
       </div>
 
-      <!-- CAMERA LAYOUT & AUDIO DSP BAR -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="text-[11px] font-bold uppercase text-slate-400 mr-1">Layout:</span>
-          <button onclick="setLayout('FULL_PRIMARY')" id="layout-FULL_PRIMARY" class="layout-btn bg-red-600 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg">Full Cam 1</button>
-          <button onclick="setLayout('FULL_SECONDARY')" id="layout-FULL_SECONDARY" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">Full Cam 2 / B-Roll</button>
-          <button onclick="setLayout('PIP')" id="layout-PIP" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">PiP Dual</button>
-          <button onclick="setLayout('SPLIT')" id="layout-SPLIT" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">50/50 Split</button>
+      <!-- TELESTRATOR (LIVE PEN ON SCREEN), ZOOM, BRIGHTNESS & COLOR THEMES -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+        <!-- Live Marker Pen (Telestrator) -->
+        <div class="flex items-center gap-1.5">
+          <button id="btnTogglePen" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold px-2.5 py-1.5 rounded-lg">
+            ✏️ Draw Pen: OFF
+          </button>
+          <button id="btnClearPen" class="bg-slate-800 hover:bg-rose-900/60 text-rose-300 border border-slate-700 font-bold px-2 py-1.5 rounded-lg" title="Clear Screen Drawings">
+            🧹 Erase
+          </button>
         </div>
 
+        <!-- Digital Zoom -->
+        <div class="flex items-center gap-1.5 flex-1 min-w-[150px]">
+          <span class="font-bold text-slate-300">🔍 Zoom:</span>
+          <input id="zoomSlider" type="range" min="1" max="4" step="0.1" value="1" class="w-full accent-red-500" />
+          <span id="zoomVal" class="mono font-bold text-amber-400 w-8">1.0x</span>
+        </div>
+
+        <!-- Brightness -->
+        <div class="flex items-center gap-1.5 flex-1 min-w-[140px]">
+          <span class="font-bold text-slate-300">☀️ Bright:</span>
+          <input id="brightSlider" type="range" min="70" max="150" step="5" value="100" class="w-full accent-amber-400" />
+        </div>
+
+        <!-- 4 Broadcast Themes -->
+        <div class="flex items-center gap-1">
+          <button onclick="setTheme('RED')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="Breaking Red"></button>
+          <button onclick="setTheme('BLUE')" class="w-5 h-5 rounded-full bg-blue-600 border border-slate-600" title="Prime Debate Blue"></button>
+          <button onclick="setTheme('GOLD')" class="w-5 h-5 rounded-full bg-amber-500 border border-slate-600" title="Investigation Gold"></button>
+          <button onclick="setTheme('EMERALD')" class="w-5 h-5 rounded-full bg-emerald-600 border border-slate-600" title="Election / Ground Green"></button>
+        </div>
+      </div>
+
+      <!-- GREEN SCREEN (CHROMA KEY) & VIRTUAL STUDIO CONTROLLER (NEW!) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div class="flex flex-wrap items-center gap-2">
-          <label class="cursor-pointer bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-bold px-2.5 py-1.5 rounded-lg">
-            🎞️ Load B-Roll Video
-            <input type="file" id="brollInput" accept="video/*" class="hidden" />
+          <label class="flex items-center gap-1.5 font-extrabold text-emerald-400 cursor-pointer">
+            <input type="checkbox" id="chkChromaKey" class="accent-emerald-500 w-4 h-4" />
+            🟩 Green Screen (Virtual Studio)
           </label>
-          <button id="btnDualCam" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold px-2.5 py-1.5 rounded-lg">
-            📱 Try Hardware Dual-Cam
-          </button>
-          <button id="btnSwapFeeds" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-700">
-            ⇄ Swap 1 & 2
-          </button>
+          <select id="chromaColorMode" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+            <option value="GREEN">Remove Green Wall</option>
+            <option value="BLUE">Remove Blue Wall</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400 text-[11px]">Sensitivity:</span>
+          <input id="chromaThreshold" type="range" min="20" max="130" value="65" class="w-24 accent-emerald-500" />
+          <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 font-bold px-2.5 py-1 rounded">
+            🏙️ Custom Studio BG
+            <input type="file" id="studioBgInput" accept="image/*" class="hidden" />
+          </label>
+          <button id="btnResetStudioBg" class="hidden bg-rose-950 text-rose-300 px-2 py-1 rounded text-[11px]">3D Default</button>
         </div>
       </div>
 
-      <!-- AUDIO METER & RECORDED VIDEO VAULT -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-300">🎙️ Broadcast Audio DSP (Noise Filter)</span>
-            <label class="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold cursor-pointer">
-              <input type="checkbox" id="chkNoiseFilter" checked class="accent-emerald-500 rounded" />
-              85Hz Cut + Compressor
-            </label>
+      <!-- MULTI-LAYOUT, DEBATE PANEL, B-ROLL VIDEO & PHOTO SLIDESHOW DECK -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
+        <!-- Row 1: Screen Layout & Debate Mode -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-1">
+            <span class="text-[11px] font-bold uppercase text-slate-400 mr-1">Layout:</span>
+            <button onclick="setLayout('FULL_PRIMARY')" id="layout-FULL_PRIMARY" class="layout-btn bg-red-600 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg">Full Cam 1</button>
+            <button onclick="setLayout('FULL_SECONDARY')" id="layout-FULL_SECONDARY" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">Full Media 2</button>
+            <button onclick="setLayout('PIP')" id="layout-PIP" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">PiP Box</button>
+            <button onclick="setLayout('SPLIT')" id="layout-SPLIT" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">2-Way Debate</button>
+            <button onclick="setLayout('TRIPLE')" id="layout-TRIPLE" class="layout-btn bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-lg">3-Way Panel</button>
           </div>
-          <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
-            <div id="audioMeterBar" class="h-full bg-gradient-to-r from-emerald-500 via-yellow-400 to-red-500 transition-all duration-75" style="width: 4%;"></div>
-          </div>
-          <div class="flex items-center justify-between text-[11px] text-slate-400">
-            <span id="micStatusText">Mic Ready</span>
-            <button id="btnMuteMic" class="text-xs font-bold text-slate-300 bg-slate-800 px-2 py-0.5 rounded">🔊 Mic Unmuted</button>
+
+          <div class="flex items-center gap-1.5">
+            <button id="btnActiveSpeaker" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold px-2.5 py-1.5 rounded-lg" title="Highlight Active Speaker in Debate">
+              🎙️ Speaker: #1
+            </button>
+            <button id="btnSwapFeeds" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2 py-1.5 rounded-lg border border-slate-700">
+              ⇄ Swap
+            </button>
           </div>
         </div>
 
-        <!-- EXPORT / APK SHARE CARD -->
+        <!-- Row 2: B-Roll Video Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <label class="cursor-pointer bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg shadow transition">
+              🎞️ Load Video B-Roll
+              <input type="file" id="brollInput" accept="video/*" class="hidden" />
+            </label>
+            <button id="btnBrollPlayPause" disabled class="bg-slate-800 disabled:opacity-40 text-slate-200 text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-700">
+              ⏯ Play/Pause
+            </button>
+            <button id="btnBrollMute" disabled class="bg-slate-800 disabled:opacity-40 text-slate-200 text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-700">
+              🔇 B-Roll Muted
+            </button>
+            <button id="btnRemoveBroll" disabled class="bg-rose-600/20 disabled:opacity-40 hover:bg-rose-600 hover:text-white text-rose-400 border border-rose-500/30 text-xs font-bold px-2.5 py-1.5 rounded-lg transition">
+              🗑 Remove Video
+            </button>
+          </div>
+          <span id="brollStatusText" class="text-[11px] text-slate-400 truncate max-w-[180px]">No Video Loaded</span>
+        </div>
+
+        <!-- Row 3: Photo Evidence / Slideshow Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <label class="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg shadow transition">
+              🖼️ Load Photos (Evidence)
+              <input type="file" id="photoSlideInput" accept="image/*" multiple class="hidden" />
+            </label>
+            <button id="btnPrevPhoto" disabled class="bg-slate-800 disabled:opacity-40 text-slate-200 text-xs font-bold px-2 py-1.5 rounded-lg border border-slate-700">
+              ◀ Prev
+            </button>
+            <button id="btnNextPhoto" disabled class="bg-slate-800 disabled:opacity-40 text-slate-200 text-xs font-bold px-2 py-1.5 rounded-lg border border-slate-700">
+              Next ▶
+            </button>
+            <button id="btnRemovePhotos" disabled class="bg-rose-600/20 disabled:opacity-40 hover:bg-rose-600 hover:text-white text-rose-400 border border-rose-500/30 text-xs font-bold px-2.5 py-1.5 rounded-lg transition">
+              🗑 Clear Photos
+            </button>
+          </div>
+          <span id="photoStatusText" class="text-[11px] text-teal-300 font-semibold">No Photos Loaded</span>
+        </div>
+      </div>
+
+      <!-- AUDIO MIXER + RECORDING QUALITY & IN-APP PREVIEW -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Audio & BGM Card -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-300">📦 Broadcast Package Output</span>
-            <span id="clipSizeBadge" class="mono text-[11px] text-slate-400">No Clip Yet</span>
+            <span class="text-xs font-bold text-slate-200">🎙️ Audio DSP & News BGM</span>
+            <button id="btnMuteMic" class="text-xs font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-1 rounded-lg">
+              🔊 Mic ON
+            </button>
           </div>
+
+          <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
+            <div id="audioMeterBar" class="h-full bg-gradient-to-r from-emerald-500 via-yellow-400 to-red-500 transition-all duration-75" style="width: 5%;"></div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 text-[11px] text-slate-400">
+            <span>Mic Gain:</span>
+            <input id="micGainSlider" type="range" min="0.5" max="3.0" step="0.1" value="1.5" class="w-28 accent-red-500" />
+            <span id="micGainVal" class="mono text-xs text-slate-200">1.5x</span>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-slate-800/80">
+            <button id="btnToggleBgm" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 py-1 rounded font-bold text-[11px]">
+              🎵 News BGM: OFF
+            </button>
+            <button id="btnBreakerSound" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded font-bold text-[11px]">
+              🔔 Chime Sting
+            </button>
+          </div>
+        </div>
+
+        <!-- Recorded Video Preview, Bitrate Quality & Export Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-200">🎬 Output Package</span>
+            <select id="recBitrateSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-0.5 text-[11px] text-emerald-300 font-bold">
+              <option value="4000000">HD High (4 Mbps)</option>
+              <option value="2500000" selected>Standard (2.5 Mbps)</option>
+              <option value="1200000">WhatsApp Fast (1.2 Mbps)</option>
+            </select>
+          </div>
+
+          <video id="recordedPreviewPlayer" controls playsinline class="hidden w-full max-h-36 bg-black rounded-lg border border-slate-700"></video>
+
           <div class="flex items-center gap-2">
-            <button id="btnSaveVideo" disabled class="flex-1 bg-emerald-600 disabled:bg-slate-800 disabled:text-slate-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-3 rounded-lg transition">
-              💾 Save / Download Video
+            <button id="btnSaveVideo" disabled class="flex-1 bg-emerald-600 disabled:bg-slate-800 disabled:text-slate-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-3 rounded-lg transition shadow">
+              💾 Save Video
             </button>
-            <button id="btnShareVideo" disabled class="flex-1 bg-sky-600 disabled:bg-slate-800 disabled:text-slate-600 hover:bg-sky-500 text-white font-bold text-xs py-2 px-3 rounded-lg transition">
-              📤 Share (WhatsApp/YT)
+            <button id="btnShareVideo" disabled class="flex-1 bg-sky-600 disabled:bg-slate-800 disabled:text-slate-600 hover:bg-sky-500 text-white font-bold text-xs py-2 px-3 rounded-lg transition shadow">
+              📤 Share Video
+            </button>
+            <button id="btnClearRecorded" disabled class="bg-rose-950/80 disabled:opacity-40 hover:bg-rose-800 text-rose-300 border border-rose-500/30 font-bold text-xs py-2 px-2.5 rounded-lg transition">
+              🗑
             </button>
           </div>
-          <p id="exportStatus" class="text-[11px] text-slate-400 truncate">Record a news segment to save or share directly from APK.</p>
+          <p id="exportStatus" class="text-[11px] text-slate-400 truncate">Ready to record crisp HD broadcast.</p>
         </div>
       </div>
     </section>
 
-    <!-- RIGHT/BOTTOM: TELEPROMPTER, LIVE SUBTITLES & GRAPHICS CONTROLLER -->
+    <!-- RIGHT COLUMN: MULTI-STORY SLOTS, KEY HIGHLIGHTS CARD, TELEPROMPTER & GRAPHICS -->
     <section class="lg:col-span-5 flex flex-col gap-3">
 
-      <!-- SUBTITLE & TELEPROMPTER ENGINE -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
+      <!-- QUICK STORY PRESET SLOTS -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
+        <span class="text-xs font-extrabold uppercase text-amber-400">🗂️ Story Presets:</span>
+        <div class="flex items-center gap-1.5">
+          <button onclick="loadStorySlot(1)" id="slotBtn1" class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-lg">Story #1</button>
+          <button onclick="loadStorySlot(2)" id="slotBtn2" class="bg-slate-800 text-slate-300 text-xs font-bold px-3 py-1 rounded-lg">Story #2</button>
+          <button onclick="loadStorySlot(3)" id="slotBtn3" class="bg-slate-800 text-slate-300 text-xs font-bold px-3 py-1 rounded-lg">Story #3</button>
+        </div>
+      </div>
+
+      <!-- 1. TELEPROMPTER & SUBTITLE ENGINE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <h2 class="text-xs font-extrabold uppercase tracking-wider text-red-400">📝 Live Subtitle & Teleprompter Engine</h2>
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-red-400">📝 Subtitles & Teleprompter</h2>
+            <button id="btnClearScript" class="text-[11px] bg-slate-800 hover:bg-rose-900/60 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
+              🧹 Clear
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1">
             <button id="btnModeScript" class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded">Typed Script</button>
-            <button id="btnModeSpeech" class="bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1 rounded">🎤 Live Speech STT</button>
-            <select id="sttLang" class="bg-slate-800 text-slate-200 text-xs font-semibold px-2 py-1 rounded border border-slate-700">
-              <option value="hi-IN">Hindi (hi-IN)</option>
-              <option value="en-IN">English (en-IN)</option>
+            <button id="btnModeSpeech" class="bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1 rounded">🎤 Live Mic STT</button>
+            <select id="sttLang" class="bg-slate-800 text-slate-200 text-xs font-semibold px-1.5 py-1 rounded border border-slate-700">
+              <option value="hi-IN">Hindi</option>
+              <option value="en-IN">English</option>
             </select>
           </div>
         </div>
 
-        <textarea id="scriptInput" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-red-500" placeholder="Type your news script here (One sentence per line)...">नमस्कार, आप देख रहे हैं अभिषेक डिजिटल न्यूज़ और मैं हूँ अभिषेक कुमार साह।
-रक्सौल और पूर्वी चंपारण से इस वक्त की सबसे बड़ी खबर सामने आ रही है।
-प्रशासन ने मुख्य मार्ग और सीमा क्षेत्र में सुरक्षा व्यवस्था को और कड़ा कर दिया है।
-ताज़ा अपडेट और ग्राउंड रिपोर्ट के लिए जुड़े रहें अभिषेक डिजिटल न्यूज़ के साथ।</textarea>
+        <textarea id="scriptInput" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-red-500" placeholder="अपनी न्यूज़ स्क्रिप्ट यहाँ लिखें..."></textarea>
 
-        <!-- Teleprompter Line Stepper -->
-        <div class="flex items-center justify-between gap-2 bg-slate-950 p-2 rounded-lg border border-slate-800">
-          <button id="btnPrevLine" class="bg-slate-800 hover:bg-slate-700 text-xs font-bold px-3 py-1.5 rounded">◀ Prev Line</button>
-          <span id="lineCounter" class="mono text-xs text-slate-400">Line 1 / 4</span>
-          <button id="btnNextLine" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded">Next Line ▶</button>
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-950 p-2 rounded-lg border border-slate-800">
+          <div class="flex items-center gap-1.5">
+            <button id="btnPrevLine" class="bg-slate-800 hover:bg-slate-700 text-xs font-bold px-2.5 py-1 rounded">◀ Prev</button>
+            <span id="lineCounter" class="mono text-xs text-amber-400 font-bold px-1">1 / 4</span>
+            <button id="btnNextLine" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded">Next ▶</button>
+          </div>
+          <button id="btnAutoPlayScript" class="bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 border border-indigo-500/40 text-xs font-bold px-2.5 py-1 rounded">
+            ▶ Auto-Step (5s)
+          </button>
         </div>
 
-        <!-- Clickable Script Lines -->
-        <div id="scriptLinesList" class="max-h-28 overflow-y-auto flex flex-col gap-1 pr-1"></div>
+        <div id="scriptLinesList" class="max-h-24 overflow-y-auto flex flex-col gap-1 pr-1"></div>
       </div>
 
-      <!-- BROADCAST GRAPHICS & BRANDING EDITOR -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
+      <!-- 2. BREAKING BULLET POINTS / KEY HIGHLIGHTS SIDE CARD (AAJ TAK STYLE) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
         <div class="flex items-center justify-between">
-          <h2 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">📺 Lower-Thirds & Station Graphics</h2>
-          <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-300 cursor-pointer">
-            <input type="checkbox" id="chkShowSubtitles" checked class="accent-red-500" />
-            Burn Subtitles on Video
+          <label class="flex items-center gap-1.5 text-xs font-extrabold uppercase text-sky-400 cursor-pointer">
+            <input type="checkbox" id="chkShowBullets" class="accent-sky-500 w-4 h-4" />
+            📌 Show Side "Key Highlights" Bullet Card
+          </label>
+          <input id="inpBulletTitle" type="text" value="मुख्य बिंदु (KEY FACTS)" class="bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-xs font-bold text-amber-300 w-40" />
+        </div>
+        <textarea id="inpBullets" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200" placeholder="हर लाइन पर एक मुख्य बिंदु लिखें...">रक्सौल बॉर्डर और मुख्य मार्ग पर प्रशासन सतर्क
+स्थानीय नागरिकों और व्यापारियों से सीधा संवाद
+अभिषेक डिजिटल न्यूज़ की एक्सक्लूसिव ग्राउंड रिपोर्ट</textarea>
+      </div>
+
+      <!-- 3. LIVE GRAPHICS SWITCHBOARD, DEBATE NAMES & LOWER THIRDS -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">🎛️ Broadcast Overlays & Names</h2>
+          <div class="flex items-center gap-1.5">
+            <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-sky-300 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-700">
+              🏷️ Custom Logo
+              <input type="file" id="logoInput" accept="image/*" class="hidden" />
+            </label>
+            <button id="btnClearLogo" class="hidden bg-rose-950 text-rose-300 text-[11px] px-1.5 py-0.5 rounded border border-rose-700">✖</button>
+          </div>
+        </div>
+
+        <!-- Layer Visibility Checkboxes -->
+        <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-2 rounded-lg border border-slate-800 text-[11px]">
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowTopBar" checked class="accent-red-500" /> Contact Bar
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowBug" checked class="accent-red-500" /> Channel Bug
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowSubtitles" checked class="accent-red-500" /> Subtitles
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowLowerThird" checked class="accent-red-500" /> Headline Bar
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowTicker" checked class="accent-red-500" /> Bottom Ticker
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
+            <input type="checkbox" id="chkShowClock" checked class="accent-red-500" /> Clock & Temp
           </label>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="text-[10px] uppercase font-bold text-slate-400">Channel Name</label>
-            <input id="inpChannel" type="text" value="ABHISHEK DIGITAL NEWS" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-bold text-white" />
+            <input id="inpChannel" type="text" value="ABHISHEK DIGITAL NEWS" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" />
           </div>
           <div>
             <label class="text-[10px] uppercase font-bold text-slate-400">Breaking Badge</label>
-            <input id="inpBadge" type="text" value="BREAKING NEWS" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-bold text-red-400" />
+            <input id="inpBadge" type="text" value="BREAKING NEWS" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-red-400" />
+          </div>
+          <div>
+            <label class="text-[10px] uppercase font-bold text-slate-400">Weather / Temp</label>
+            <input id="inpWeather" type="text" value="29°C Raxaul" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-amber-300" />
           </div>
         </div>
 
         <div>
-          <label class="text-[10px] uppercase font-bold text-slate-400">Main Headline (Lower-Third Bar)</label>
+          <div class="flex items-center justify-between">
+            <label class="text-[10px] uppercase font-bold text-slate-400">Main Headline (Lower-Third Bar)</label>
+            <button onclick="document.getElementById('inpHeadline').value=''; saveCurrentStorySlot();" class="text-[10px] text-rose-400 hover:underline">Clear</button>
+          </div>
           <input id="inpHeadline" type="text" value="रक्सौल से सीधी ग्राउंड रिपोर्ट: क्षेत्र में विकास और सुरक्षा व्यवस्था पर विशेष कवरेज" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-bold text-white" />
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-3 gap-2">
           <div>
-            <label class="text-[10px] uppercase font-bold text-slate-400">Reporter Name</label>
-            <input id="inpReporter" type="text" value="Abhishek Kumar Sah" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200" />
+            <label class="text-[10px] uppercase font-bold text-slate-400">Anchor / Cam 1 Name</label>
+            <input id="inpReporter" type="text" value="Abhishek Kumar Sah" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200" />
           </div>
           <div>
-            <label class="text-[10px] uppercase font-bold text-slate-400">Location Badge</label>
-            <input id="inpLocation" type="text" value="Raxaul, Bihar" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200" />
+            <label class="text-[10px] uppercase font-bold text-slate-400">Guest / Panel 2 Name</label>
+            <input id="inpGuestName" type="text" value="Ground Zero / अतिथि" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-amber-200" />
+          </div>
+          <div>
+            <label class="text-[10px] uppercase font-bold text-slate-400">Location Tag</label>
+            <input id="inpLocation" type="text" value="Raxaul, Bihar" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200" />
           </div>
         </div>
 
         <div>
-          <label class="text-[10px] uppercase font-bold text-slate-400">Scrolling Bottom Ticker Tape</label>
-          <input id="inpTicker" type="text" value="अभिषेक डिजिटल न्यूज़ में आपका स्वागत है • मौजे वार्ड नं. 13, माई स्थान रोड, रक्सौल, बिहार - 845305 • किसी भी खबर या विज्ञापन के लिए संपर्क करें: Mob 9693539197, WhatsApp 8092912107 • ग्राउंड जीरो से सबसे तेज़ और सटीक खबरें •" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-amber-300" />
+          <input id="inpTicker" type="text" value="अभिषेक डिजिटल न्यूज़ में आपका स्वागत है • मौजे वार्ड नं. 13, माई स्थान रोड, रक्सौल, बिहार - 845305 • किसी भी खबर या विज्ञापन के लिए संपर्क करें: Mob 9693539197, WhatsApp 8092912107 • ग्राउंड जीरो से सबसे तेज़ और सटीक खबरें •" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-xs text-amber-300" />
         </div>
 
         <div>
-          <label class="text-[10px] uppercase font-bold text-slate-400">Top Studio Contact Ribbon</label>
-          <input id="inpContact" type="text" value="Mauje, Ward No. 13, Mai Sthan Road, Raxaul - 845305 | Mob: 9693539197 | WA: 8092912107" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-[11px] text-slate-300" />
+          <input id="inpContact" type="text" value="Mauje, Ward No. 13, Mai Sthan Road, Raxaul - 845305 | Mob: 9693539197 | WA: 8092912107" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-[11px] text-slate-300" />
         </div>
       </div>
     </section>
   </main>
 
-  <!-- HIDDEN VIDEO ELEMENTS FOR COMPOSITING -->
-  <div class="hidden">
+  <!-- HIDDEN VIDEO & CHROMA PROCESSING ELEMENTS -->
+  <div style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;">
     <video id="vidPrimary" autoplay playsinline muted></video>
-    <video id="vidSecondary" autoplay playsinline loop muted></video>
+    <video id="vidSecondary" autoplay playsinline loop muted crossorigin="anonymous"></video>
+    <canvas id="chromaCanvas" width="640" height="360"></canvas>
   </div>
 
   <script>
     // ============================================================================
-    // ABHISHEK DIGITAL NEWS - PRO STUDIO SUITE ENGINE (WEB + CAPACITOR APK)
+    // ABHISHEK DIGITAL NEWS - v5.0 ULTIMATE PCR ENGINE
     // ============================================================================
     const canvas = document.getElementById('broadcastCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const chromaCanvas = document.getElementById('chromaCanvas');
+    const chromaCtx = chromaCanvas.getContext('2d', { willReadFrequently: true });
     const vidPrimary = document.getElementById('vidPrimary');
     const vidSecondary = document.getElementById('vidSecondary');
+    const previewPlayer = document.getElementById('recordedPreviewPlayer');
 
+    let isVerticalShorts = false;
+    let cw = 1280;
+    let ch = 720;
+
+    // Camera & Visual State
     let streamPrimary = null;
-    let streamSecondary = null;
-    let currentFacingMode = 'user'; // 'user' (front) or 'environment' (rear)
-    let currentLayout = 'FULL_PRIMARY'; // FULL_PRIMARY, FULL_SECONDARY, PIP, SPLIT
+    let isCamRunning = false;
+    let currentFacingMode = 'user';
+    let customMirrorOverride = null;
+    let isTorchOn = false;
+    let camZoom = 1.0;
+    let camBrightness = 100;
+    let currentLayout = 'FULL_PRIMARY'; // FULL_PRIMARY, FULL_SECONDARY, PIP, SPLIT, TRIPLE
     let swapFeeds = false;
+    let activeSpeaker = 1; // 1, 2, or 3 for Debate Highlight
 
-    // Audio DSP & Recording State
+    // Chroma Key & Virtual Studio BG
+    let customStudioBgImg = null;
+    let customLogoImg = null;
+
+    // Secondary Media: B-Roll Video & Photo Slides
+    let secondaryMediaMode = 'NONE';
+    let brollObjectUrl = null;
+    let photoSlides = [];
+    let currentPhotoIdx = 0;
+
+    // Special Full-Screen Modes (Countdown, Breaking Flash, End Slate)
+    let breakingFlashUntil = 0;
+    let countdownSecLeft = 0;
+    let countdownTimer = null;
+    let showOutroSlate = false;
+
+    // Live Telestrator Drawing Strokes
+    let isPenEnabled = false;
+    let isDrawingNow = false;
+    let penStrokes = []; // Array of arrays of {x, y}
+
+    // Broadcast Color Themes
+    const THEMES = {
+      RED:     { primary: '#dc2626', dark: '#7f1d1d', accent: '#facc15', badge: '#b91c1c' },
+      BLUE:    { primary: '#2563eb', dark: '#1e3a8a', accent: '#38bdf8', badge: '#1d4ed8' },
+      GOLD:    { primary: '#d97706', dark: '#451a03', accent: '#fef08a', badge: '#b45309' },
+      EMERALD: { primary: '#059669', dark: '#064e3b', accent: '#a7f3d0', badge: '#047857' }
+    };
+    let activeTheme = THEMES.RED;
+
+    // Audio Engine
     let audioCtx = null;
     let destNode = null;
     let analyserNode = null;
     let micStream = null;
+    let micGainNode = null;
+    let brollAudioSourceNode = null;
+    let brollGainNode = null;
     let isMicMuted = false;
+    let bgmInterval = null;
+    let isBgmActive = false;
+
+    // Recording State
     let mediaRecorder = null;
     let recordedChunks = [];
     let lastRecordedBlob = null;
+    let lastRecordedExt = 'mp4';
     let isRecording = false;
-    let recStartTime = 0;
+    let isRecPaused = false;
+    let recSeconds = 0;
     let recInterval = null;
 
-    // Subtitles & Ticker State
+    // Teleprompter & Story Slots
+    let activeStorySlot = 1;
     let scriptLines = [];
     let currentLineIdx = 0;
+    let autoPlayTimer = null;
+    let subtitleMode = 'SCRIPT';
     let liveSpokenSubtitle = '';
-    let subtitleMode = 'SCRIPT'; // 'SCRIPT' or 'SPEECH'
     let recognition = null;
     let tickerX = 1280;
 
-    // Persistent Settings Keys
-    const STORAGE_KEY = 'ADN_STUDIO_CONFIG_V2';
+    const DEFAULT_STORIES = {
+      1: {
+        badge: 'BREAKING NEWS',
+        headline: 'रक्सौल से सीधी ग्राउंड रिपोर्ट: क्षेत्र में विकास और सुरक्षा व्यवस्था पर विशेष कवरेज',
+        script: 'नमस्कार, आप देख रहे हैं अभिषेक डिजिटल न्यूज़ और मैं हूँ अभिषेक कुमार साह।\nरक्सौल और पूर्वी चंपारण से इस वक्त की सबसे बड़ी खबर सामने आ रही है।\nप्रशासन ने मुख्य मार्ग और सीमा क्षेत्र में सुरक्षा व्यवस्था को और कड़ा कर दिया है।\nताज़ा अपडेट और ग्राउंड रिपोर्ट के लिए जुड़े रहें अभिषेक डिजिटल न्यूज़ के साथ।'
+      },
+      2: {
+        badge: 'MAHA DEBATE',
+        headline: 'जनता के मुद्दे और विकास की रफ़्तार: अभिषेक डिजिटल न्यूज़ पर आज की सबसे बड़ी बहस',
+        script: 'नमस्कार, अभिषेक डिजिटल न्यूज़ की महा-बहस में आपका स्वागत है।\nआज हमारे साथ पैनल में जुड़े हैं क्षेत्र के प्रमुख प्रतिनिधि और ग्राउंड जीरो से हमारे संवाददाता।\nसीधा सवाल यह है कि आम जनता की समस्याओं का स्थायी समाधान कब होगा?'
+      },
+      3: {
+        badge: 'EXCLUSIVE',
+        headline: 'बिहार शिक्षा एवं रोजगार बुलेटिन: युवाओं और छात्रों के लिए आज की सबसे बड़ी खबर',
+        script: 'नमस्कार, मैं अभिषेक कुमार साह और आप देख रहे हैं अभिषेक डिजिटल न्यूज़ का स्पेशल बुलेटिन।\nप्रतियोगी परीक्षाओं और नई बहाली से जुड़ी आज की सबसे महत्वपूर्ण जानकारी सामने आ चुकी है।\nपूरी रिपोर्ट के लिए वीडियो को अंत तक देखें और अपने दोस्तों के साथ शेयर करें।'
+      }
+    };
 
-    function loadSavedStudioState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const data = JSON.parse(raw);
-        if (data.channel) document.getElementById('inpChannel').value = data.channel;
-        if (data.badge) document.getElementById('inpBadge').value = data.badge;
-        if (data.headline) document.getElementById('inpHeadline').value = data.headline;
-        if (data.reporter) document.getElementById('inpReporter').value = data.reporter;
-        if (data.location) document.getElementById('inpLocation').value = data.location;
-        if (data.ticker) document.getElementById('inpTicker').value = data.ticker;
-        if (data.contact) document.getElementById('inpContact').value = data.contact;
-        if (data.script) document.getElementById('scriptInput').value = data.script;
-      } catch (e) { console.warn('State load skipped:', e); }
+    // ----------------------------------------------------------------------------
+    // 1. STORY SLOTS & TELESTRATOR DRAWING PEN
+    // ----------------------------------------------------------------------------
+    function loadStorySlot(slotNum) {
+      activeStorySlot = slotNum;
+      [1, 2, 3].forEach(n => {
+        document.getElementById('slotBtn' + n).className = n === slotNum
+          ? 'bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-lg shadow'
+          : 'bg-slate-800 text-slate-300 text-xs font-bold px-3 py-1 rounded-lg';
+      });
+      const savedRaw = localStorage.getItem('ADN_V5_SLOT_' + slotNum);
+      const data = savedRaw ? JSON.parse(savedRaw) : DEFAULT_STORIES[slotNum];
+      document.getElementById('inpBadge').value = data.badge || 'BREAKING NEWS';
+      document.getElementById('inpHeadline').value = data.headline || '';
+      document.getElementById('scriptInput').value = data.script || '';
+      currentLineIdx = 0;
+      parseScriptLines();
     }
 
-    function saveStudioState() {
+    function saveCurrentStorySlot() {
       try {
-        const data = {
-          channel: document.getElementById('inpChannel').value,
+        localStorage.setItem('ADN_V5_SLOT_' + activeStorySlot, JSON.stringify({
           badge: document.getElementById('inpBadge').value,
           headline: document.getElementById('inpHeadline').value,
-          reporter: document.getElementById('inpReporter').value,
-          location: document.getElementById('inpLocation').value,
-          ticker: document.getElementById('inpTicker').value,
-          contact: document.getElementById('inpContact').value,
           script: document.getElementById('scriptInput').value
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }));
       } catch (e) {}
     }
 
-    ['inpChannel','inpBadge','inpHeadline','inpReporter','inpLocation','inpTicker','inpContact','scriptInput'].forEach(id => {
+    ['inpBadge', 'inpHeadline', 'scriptInput'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
-        saveStudioState();
+        saveCurrentStorySlot();
         if (id === 'scriptInput') parseScriptLines();
       });
     });
 
-    // Screen WakeLock for Mobile Reporting
-    async function requestWakeLock() {
-      try {
-        if ('wakeLock' in navigator) {
-          await navigator.wakeLock.request('screen');
-        }
-      } catch (e) {}
+    // Telestrator Touch / Mouse Drawing on Canvas
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: ((clientX - rect.left) / rect.width) * cw,
+        y: ((clientY - rect.top) / rect.height) * ch
+      };
     }
 
+    canvas.addEventListener('pointerdown', (e) => {
+      if (!isPenEnabled) return;
+      isDrawingNow = true;
+      const pt = getCanvasCoords(e);
+      penStrokes.push([pt]);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isPenEnabled || !isDrawingNow) return;
+      const pt = getCanvasCoords(e);
+      penStrokes[penStrokes.length - 1].push(pt);
+    });
+    window.addEventListener('pointerup', () => { isDrawingNow = false; });
+
+    document.getElementById('btnTogglePen').addEventListener('click', (e) => {
+      isPenEnabled = !isPenEnabled;
+      e.target.textContent = isPenEnabled ? '✏️ Draw Pen: ON' : '✏️ Draw Pen: OFF';
+      e.target.className = isPenEnabled
+        ? 'bg-amber-500 text-slate-950 font-extrabold px-2.5 py-1.5 rounded-lg shadow'
+        : 'bg-slate-800 text-slate-200 border border-slate-700 font-bold px-2.5 py-1.5 rounded-lg';
+    });
+    document.getElementById('btnClearPen').addEventListener('click', () => { penStrokes = []; });
+
     // ----------------------------------------------------------------------------
-    // 1. CAMERA & AUDIO DSP INITIALIZATION
+    // 2. ASPECT RATIO, THEME, STUDIO BG & SPECIAL SLATES
     // ----------------------------------------------------------------------------
-    async function startPrimaryCamera(facing = 'user') {
-      try {
-        if (streamPrimary) {
-          streamPrimary.getTracks().forEach(t => t.stop());
+    document.getElementById('btnAspect').addEventListener('click', (e) => {
+      if (isRecording) return alert('रिकॉर्डिंग के दौरान Aspect Ratio नहीं बदला जा सकता।');
+      isVerticalShorts = !isVerticalShorts;
+      cw = isVerticalShorts ? 720 : 1280;
+      ch = isVerticalShorts ? 1280 : 720;
+      canvas.width = cw;
+      canvas.height = ch;
+      e.target.textContent = isVerticalShorts ? '📱 9:16 Shorts/Reels' : '📺 16:9 YouTube';
+      e.target.className = isVerticalShorts
+        ? 'bg-pink-600 text-white font-bold text-xs px-2.5 py-2 rounded-lg shadow'
+        : 'bg-purple-600/30 border border-purple-500/40 text-purple-200 font-bold text-xs px-2.5 py-2 rounded-lg';
+      tickerX = cw;
+    });
+
+    function setTheme(name) { if (THEMES[name]) activeTheme = THEMES[name]; }
+
+    document.getElementById('zoomSlider').addEventListener('input', (e) => {
+      camZoom = parseFloat(e.target.value);
+      document.getElementById('zoomVal').textContent = camZoom.toFixed(1) + 'x';
+    });
+    document.getElementById('brightSlider').addEventListener('input', (e) => {
+      camBrightness = parseInt(e.target.value, 10);
+    });
+
+    // Custom Virtual Studio Background Upload
+    document.getElementById('studioBgInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        customStudioBgImg = img;
+        document.getElementById('chkChromaKey').checked = true;
+        document.getElementById('btnResetStudioBg').classList.remove('hidden');
+      };
+      img.src = URL.createObjectURL(file);
+    });
+    document.getElementById('btnResetStudioBg').addEventListener('click', (e) => {
+      customStudioBgImg = null;
+      e.target.classList.add('hidden');
+    });
+
+    // Custom Logo Upload
+    document.getElementById('logoInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        customLogoImg = img;
+        document.getElementById('btnClearLogo').classList.remove('hidden');
+      };
+      img.src = URL.createObjectURL(file);
+    });
+    document.getElementById('btnClearLogo').addEventListener('click', (e) => {
+      customLogoImg = null;
+      e.target.classList.add('hidden');
+    });
+
+    // 5-Second TV Countdown Intro Trigger
+    document.getElementById('btnCountdownIntro').addEventListener('click', async () => {
+      await ensureMasterAudioEngine();
+      showOutroSlate = false;
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownSecLeft = 5;
+      playCountdownBeep(660, 0.18);
+      countdownTimer = setInterval(() => {
+        countdownSecLeft--;
+        if (countdownSecLeft > 0) {
+          playCountdownBeep(660, 0.18);
+        } else {
+          playCountdownBeep(1046.5, 0.45); // High GO tone
+          clearInterval(countdownTimer);
+          countdownTimer = null;
         }
-        const constraints = {
-          video: {
-            facingMode: { ideal: facing },
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          },
-          audio: false
-        };
-        streamPrimary = await navigator.mediaDevices.getUserMedia(constraints);
-        vidPrimary.srcObject = streamPrimary;
-        await vidPrimary.play();
-        currentFacingMode = facing;
+      }, 1000);
+    });
 
-        if (!audioCtx) {
-          await initAudioDSP();
-        }
-        requestWakeLock();
-      } catch (err) {
-        alert('Camera Error: Please allow Camera & Microphone permissions in Android Settings.\n' + err.message);
-      }
-    }
+    // End Outro Slate Toggle
+    document.getElementById('btnOutroSlate').addEventListener('click', (e) => {
+      showOutroSlate = !showOutroSlate;
+      e.target.className = showOutroSlate
+        ? 'bg-amber-500 text-slate-950 font-extrabold text-xs px-2.5 py-2 rounded-lg shadow'
+        : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold text-xs px-2.5 py-2 rounded-lg';
+    });
 
-    async function initAudioDSP() {
-      try {
-        micStream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
-          },
-          video: false
-        });
+    // Active Speaker Switcher for Debate Layouts
+    document.getElementById('btnActiveSpeaker').addEventListener('click', (e) => {
+      activeSpeaker = (activeSpeaker % 3) + 1;
+      e.target.textContent = `🎙️ Speaker: #${activeSpeaker}`;
+    });
 
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioCtx.createMediaStreamSource(micStream);
-
-        // 85Hz High-Pass Filter to cut wind/fan rumble
-        const highPass = audioCtx.createBiquadFilter();
-        highPass.type = 'highpass';
-        highPass.frequency.value = 85;
-
-        // Broadcast Voice Compressor
-        const compressor = audioCtx.createDynamicsCompressor();
-        compressor.threshold.value = -24;
-        compressor.knee.value = 30;
-        compressor.ratio.value = 12;
-        compressor.attack.value = 0.003;
-        compressor.release.value = 0.25;
-
+    // ----------------------------------------------------------------------------
+    // 3. MASTER AUDIO ENGINE & SYNTHESIZED NEWS BGM
+    // ----------------------------------------------------------------------------
+    async function ensureMasterAudioEngine() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+        destNode = audioCtx.createMediaStreamDestination();
         analyserNode = audioCtx.createAnalyser();
         analyserNode.fftSize = 256;
 
-        destNode = audioCtx.createMediaStreamDestination();
+        // Continuous Silent Oscillator Clock (Prevents MediaRecorder Unknown Error)
+        const silentOsc = audioCtx.createOscillator();
+        const silentGain = audioCtx.createGain();
+        silentGain.gain.value = 0.00001;
+        silentOsc.connect(silentGain);
+        silentGain.connect(destNode);
+        silentOsc.start();
 
-        source.connect(highPass);
-        highPass.connect(compressor);
-        compressor.connect(analyserNode);
-        compressor.connect(destNode);
+        updateAudioMeterLoop();
+      }
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
 
-        updateAudioMeter();
-      } catch (e) {
-        console.warn('Audio DSP init warning:', e);
-        document.getElementById('micStatusText').textContent = 'Mic Permission Needed';
+      if (!micStream) {
+        try {
+          micStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+            video: false
+          });
+          const micSource = audioCtx.createMediaStreamSource(micStream);
+          const highPass = audioCtx.createBiquadFilter();
+          highPass.type = 'highpass';
+          highPass.frequency.value = 85;
+          const compressor = audioCtx.createDynamicsCompressor();
+          compressor.threshold.value = -22;
+          compressor.ratio.value = 10;
+          micGainNode = audioCtx.createGain();
+          micGainNode.gain.value = isMicMuted ? 0 : parseFloat(document.getElementById('micGainSlider').value);
+
+          micSource.connect(highPass);
+          highPass.connect(compressor);
+          compressor.connect(micGainNode);
+          micGainNode.connect(analyserNode);
+          micGainNode.connect(destNode);
+        } catch (err) {}
+      }
+
+      if (!brollAudioSourceNode) {
+        try {
+          brollAudioSourceNode = audioCtx.createMediaElementSource(vidSecondary);
+          brollGainNode = audioCtx.createGain();
+          brollGainNode.gain.value = 0;
+          brollAudioSourceNode.connect(brollGainNode);
+          brollGainNode.connect(analyserNode);
+          brollGainNode.connect(destNode);
+          brollGainNode.connect(audioCtx.destination);
+        } catch (e) {}
       }
     }
 
-    function updateAudioMeter() {
+    function playCountdownBeep(freq, dur) {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.22, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      osc.connect(g);
+      g.connect(destNode);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + dur + 0.02);
+    }
+
+    function updateAudioMeterLoop() {
       if (!analyserNode) return;
       const data = new Uint8Array(analyserNode.frequencyBinCount);
       function tick() {
         analyserNode.getByteFrequencyData(data);
         let sum = 0;
         for (let i = 0; i < data.length; i++) sum += data[i];
-        const avg = isMicMuted ? 0 : Math.min(100, Math.round((sum / data.length) * 1.4));
-        document.getElementById('audioMeterBar').style.width = Math.max(3, avg) + '%';
+        const level = isMicMuted ? 2 : Math.min(100, Math.round((sum / data.length) * 1.5));
+        document.getElementById('audioMeterBar').style.width = Math.max(3, level) + '%';
         requestAnimationFrame(tick);
       }
       tick();
     }
 
-    // Try Hardware Dual Camera (Front + Rear simultaneously on supported devices)
-    document.getElementById('btnDualCam').addEventListener('click', async () => {
-      try {
-        const otherFacing = currentFacingMode === 'user' ? 'environment' : 'user';
-        streamSecondary = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: otherFacing }, width: { ideal: 640 }, height: { ideal: 360 } },
-          audio: false
-        });
-        vidSecondary.srcObject = streamSecondary;
-        await vidSecondary.play();
-        setLayout('PIP');
-      } catch (e) {
-        alert('Note: Your phone hardware allows 1 active camera at a time. Use "🔄 Flip Front/Rear" anytime during recording, or load a B-Roll video clip for PiP/Split screen!');
+    function playNewsBgmPulse() {
+      if (!audioCtx || !isBgmActive) return;
+      const now = audioCtx.currentTime;
+      const bass = audioCtx.createOscillator();
+      const bGain = audioCtx.createGain();
+      bass.type = 'sawtooth';
+      bass.frequency.setValueAtTime(73.42, now);
+      bGain.gain.setValueAtTime(0.032, now);
+      bGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      bass.connect(bGain);
+      bGain.connect(destNode);
+      bGain.connect(audioCtx.destination);
+      bass.start(now);
+      bass.stop(now + 0.23);
+    }
+
+    document.getElementById('btnToggleBgm').addEventListener('click', async (e) => {
+      await ensureMasterAudioEngine();
+      isBgmActive = !isBgmActive;
+      if (isBgmActive) {
+        playNewsBgmPulse();
+        bgmInterval = setInterval(playNewsBgmPulse, 500);
+        e.target.textContent = '🎵 News BGM: ON';
+        e.target.className = 'bg-emerald-700 text-white px-2.5 py-1 rounded font-bold text-[11px]';
+      } else {
+        clearInterval(bgmInterval);
+        e.target.textContent = '🎵 News BGM: OFF';
+        e.target.className = 'bg-slate-800 text-slate-200 border border-slate-700 px-2.5 py-1 rounded font-bold text-[11px]';
       }
     });
 
-    // Load B-Roll Video into Secondary Feed
-    document.getElementById('brollInput').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (streamSecondary) {
-        streamSecondary.getTracks().forEach(t => t.stop());
-        streamSecondary = null;
-      }
-      vidSecondary.srcObject = null;
-      vidSecondary.src = URL.createObjectURL(file);
-      vidSecondary.muted = true;
-      vidSecondary.play();
-      setLayout('PIP');
+    function triggerChimeSound() {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, idx) => {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(f, now + idx * 0.10);
+        g.gain.setValueAtTime(0.24, now + idx * 0.10);
+        g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.10 + 0.45);
+        osc.connect(g);
+        g.connect(destNode);
+        g.connect(audioCtx.destination);
+        osc.start(now + idx * 0.10);
+        osc.stop(now + idx * 0.10 + 0.46);
+      });
+    }
+
+    document.getElementById('btnBreakerSound').addEventListener('click', async () => {
+      await ensureMasterAudioEngine();
+      triggerChimeSound();
+    });
+    document.getElementById('btnFlashBreaking').addEventListener('click', async () => {
+      await ensureMasterAudioEngine();
+      triggerChimeSound();
+      breakingFlashUntil = Date.now() + 3500;
     });
 
-    document.getElementById('btnStartCams').addEventListener('click', () => startPrimaryCamera(currentFacingMode));
-
-    document.getElementById('btnFlipCam').addEventListener('click', () => {
-      const nextMode = currentFacingMode === 'user' ? 'environment' : 'user';
-      startPrimaryCamera(nextMode);
-    });
-
-    document.getElementById('btnSwapFeeds').addEventListener('click', () => {
-      swapFeeds = !swapFeeds;
+    document.getElementById('micGainSlider').addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      document.getElementById('micGainVal').textContent = val.toFixed(1) + 'x';
+      if (micGainNode && !isMicMuted) micGainNode.gain.value = val;
     });
 
     document.getElementById('btnMuteMic').addEventListener('click', (e) => {
       isMicMuted = !isMicMuted;
-      if (micStream) {
-        micStream.getAudioTracks().forEach(t => t.enabled = !isMicMuted);
-      }
-      e.target.textContent = isMicMuted ? '🔇 Mic Muted' : '🔊 Mic Unmuted';
+      if (micGainNode) micGainNode.gain.value = isMicMuted ? 0 : parseFloat(document.getElementById('micGainSlider').value);
+      e.target.textContent = isMicMuted ? '🔇 Mic Muted' : '🔊 Mic ON';
+      e.target.className = isMicMuted
+        ? 'text-xs font-bold text-rose-300 bg-rose-950/80 border border-rose-500/40 px-2.5 py-1 rounded-lg'
+        : 'text-xs font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-1 rounded-lg';
     });
+
+    // ----------------------------------------------------------------------------
+    // 4. CAMERA & B-ROLL / PHOTO SLIDESHOW CONTROLS
+    // ----------------------------------------------------------------------------
+    async function startPrimaryCamera(facing = 'user') {
+      try {
+        await ensureMasterAudioEngine();
+        if (streamPrimary) streamPrimary.getTracks().forEach(t => t.stop());
+        streamPrimary = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        vidPrimary.srcObject = streamPrimary;
+        await vidPrimary.play();
+        currentFacingMode = facing;
+        isCamRunning = true;
+        isTorchOn = false;
+        updateCamButtonUI();
+        if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (e) {} }
+      } catch (err) {
+        alert('Camera Error: कृपया Camera और Microphone की परमिशन दें।\n' + err.message);
+      }
+    }
+
+    function stopPrimaryCamera() {
+      if (streamPrimary) {
+        streamPrimary.getTracks().forEach(t => t.stop());
+        streamPrimary = null;
+      }
+      vidPrimary.srcObject = null;
+      isCamRunning = false;
+      isTorchOn = false;
+      updateCamButtonUI();
+    }
+
+    function updateCamButtonUI() {
+      const btn = document.getElementById('btnToggleCam');
+      btn.textContent = isCamRunning ? '⏹ Stop Cam' : '📷 Start Cam';
+      btn.className = isCamRunning
+        ? 'bg-rose-600 hover:bg-rose-500 active:scale-95 transition text-white font-bold text-xs px-3 py-2 rounded-lg shadow'
+        : 'bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition text-white font-bold text-xs px-3 py-2 rounded-lg shadow';
+    }
+
+    document.getElementById('btnToggleCam').addEventListener('click', () => {
+      if (isCamRunning) stopPrimaryCamera();
+      else startPrimaryCamera(currentFacingMode);
+    });
+    document.getElementById('btnFlipCam').addEventListener('click', () => {
+      customMirrorOverride = null;
+      startPrimaryCamera(currentFacingMode === 'user' ? 'environment' : 'user');
+    });
+    document.getElementById('btnMirrorCam').addEventListener('click', () => {
+      const cur = customMirrorOverride !== null ? customMirrorOverride : (currentFacingMode === 'user');
+      customMirrorOverride = !cur;
+    });
+    document.getElementById('btnTorch').addEventListener('click', async () => {
+      if (!streamPrimary) return alert('पहले कैमरा चालू करें।');
+      const track = streamPrimary.getVideoTracks()[0];
+      try {
+        isTorchOn = !isTorchOn;
+        await track.applyConstraints({ advanced: [{ torch: isTorchOn }] });
+      } catch (e) {
+        isTorchOn = false;
+        alert('Torch केवल Rear (पीछे वाले) कैमरे पर काम करता है।');
+      }
+    });
+
+    document.getElementById('btnSnapshot').addEventListener('click', () => {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const fileName = `ADN_Snap_${Date.now()}.png`;
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
+          try {
+            const b64 = await blobToBase64(blob);
+            await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: b64, directory: 'DOCUMENTS' });
+            alert(`📸 HD Snapshot Saved: Documents/${fileName}`);
+            return;
+          } catch (e) {}
+        }
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
+      }, 'image/png');
+    });
+
+    // B-Roll Video Loader
+    document.getElementById('brollInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      await ensureMasterAudioEngine();
+      if (brollObjectUrl) URL.revokeObjectURL(brollObjectUrl);
+      brollObjectUrl = URL.createObjectURL(file);
+      vidSecondary.srcObject = null;
+      vidSecondary.src = brollObjectUrl;
+      vidSecondary.muted = true;
+      await vidSecondary.play();
+
+      secondaryMediaMode = 'VIDEO';
+      document.getElementById('brollStatusText').textContent = `🎞️ ${file.name}`;
+      document.getElementById('btnBrollPlayPause').disabled = false;
+      document.getElementById('btnBrollMute').disabled = false;
+      document.getElementById('btnRemoveBroll').disabled = false;
+      if (currentLayout === 'FULL_PRIMARY') setLayout('PIP');
+      e.target.value = '';
+    });
+
+    document.getElementById('btnBrollPlayPause').addEventListener('click', () => {
+      if (vidSecondary.paused) vidSecondary.play();
+      else vidSecondary.pause();
+    });
+    document.getElementById('btnBrollMute').addEventListener('click', async (e) => {
+      await ensureMasterAudioEngine();
+      vidSecondary.muted = false;
+      if (brollGainNode) {
+        const muted = brollGainNode.gain.value === 0;
+        brollGainNode.gain.value = muted ? 0.85 : 0;
+        e.target.textContent = muted ? '🔊 B-Roll Audio ON' : '🔇 B-Roll Muted';
+      }
+    });
+    document.getElementById('btnRemoveBroll').addEventListener('click', () => {
+      vidSecondary.pause();
+      vidSecondary.removeAttribute('src');
+      vidSecondary.load();
+      if (brollGainNode) brollGainNode.gain.value = 0;
+      secondaryMediaMode = photoSlides.length > 0 ? 'PHOTOS' : 'NONE';
+      document.getElementById('brollStatusText').textContent = 'No Video Loaded';
+      document.getElementById('btnBrollPlayPause').disabled = true;
+      document.getElementById('btnBrollMute').disabled = true;
+      document.getElementById('btnRemoveBroll').disabled = true;
+      if (secondaryMediaMode === 'NONE') setLayout('FULL_PRIMARY');
+    });
+
+    // Photo Slideshow Loader
+    document.getElementById('photoSlideInput').addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      photoSlides = [];
+      currentPhotoIdx = 0;
+      files.forEach(file => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        photoSlides.push(img);
+      });
+      secondaryMediaMode = 'PHOTOS';
+      document.getElementById('photoStatusText').textContent = `🖼️ Photo 1 / ${photoSlides.length}`;
+      document.getElementById('btnPrevPhoto').disabled = false;
+      document.getElementById('btnNextPhoto').disabled = false;
+      document.getElementById('btnRemovePhotos').disabled = false;
+      if (currentLayout === 'FULL_PRIMARY') setLayout('PIP');
+      e.target.value = '';
+    });
+
+    document.getElementById('btnPrevPhoto').addEventListener('click', () => {
+      if (!photoSlides.length) return;
+      currentPhotoIdx = (currentPhotoIdx - 1 + photoSlides.length) % photoSlides.length;
+      document.getElementById('photoStatusText').textContent = `🖼️ Photo ${currentPhotoIdx + 1} / ${photoSlides.length}`;
+    });
+    document.getElementById('btnNextPhoto').addEventListener('click', () => {
+      if (!photoSlides.length) return;
+      currentPhotoIdx = (currentPhotoIdx + 1) % photoSlides.length;
+      document.getElementById('photoStatusText').textContent = `🖼️ Photo ${currentPhotoIdx + 1} / ${photoSlides.length}`;
+    });
+    document.getElementById('btnRemovePhotos').addEventListener('click', () => {
+      photoSlides = [];
+      currentPhotoIdx = 0;
+      secondaryMediaMode = vidSecondary.src ? 'VIDEO' : 'NONE';
+      document.getElementById('photoStatusText').textContent = 'No Photos Loaded';
+      document.getElementById('btnPrevPhoto').disabled = true;
+      document.getElementById('btnNextPhoto').disabled = true;
+      document.getElementById('btnRemovePhotos').disabled = true;
+      if (secondaryMediaMode === 'NONE') setLayout('FULL_PRIMARY');
+    });
+
+    document.getElementById('btnSwapFeeds').addEventListener('click', () => { swapFeeds = !swapFeeds; });
 
     function setLayout(mode) {
       currentLayout = mode;
@@ -453,448 +1057,722 @@
     }
 
     // ----------------------------------------------------------------------------
-    // 2. TELEPROMPTER & SPEECH-TO-TEXT SUBTITLE ENGINE
+    // 5. TELEPROMPTER & SPEECH RECOGNITION
     // ----------------------------------------------------------------------------
     function parseScriptLines() {
       const raw = document.getElementById('scriptInput').value || '';
       scriptLines = raw.split('\n').map(s => s.trim()).filter(Boolean);
       if (currentLineIdx >= scriptLines.length) currentLineIdx = 0;
-      renderScriptLinesUI();
-    }
-
-    function renderScriptLinesUI() {
       const container = document.getElementById('scriptLinesList');
       container.innerHTML = '';
-      document.getElementById('lineCounter').textContent = `Line ${scriptLines.length ? currentLineIdx + 1 : 0} / ${scriptLines.length}`;
+      document.getElementById('lineCounter').textContent = `${scriptLines.length ? currentLineIdx + 1 : 0} / ${scriptLines.length}`;
 
       scriptLines.forEach((line, idx) => {
         const div = document.createElement('div');
-        const isCurrent = idx === currentLineIdx;
         div.className = `text-xs p-2 rounded cursor-pointer transition border ${
-          isCurrent
-            ? 'bg-red-600/20 border-red-500 text-white font-bold'
-            : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+          idx === currentLineIdx ? 'bg-red-600/25 border-red-500 text-white font-bold' : 'bg-slate-950 border-slate-800 text-slate-400'
         }`;
         div.textContent = `${idx + 1}. ${line}`;
-        div.onclick = () => {
-          currentLineIdx = idx;
-          renderScriptLinesUI();
-        };
+        div.onclick = () => { currentLineIdx = idx; parseScriptLines(); };
         container.appendChild(div);
       });
     }
 
     document.getElementById('btnPrevLine').addEventListener('click', () => {
-      if (scriptLines.length === 0) return;
+      if (!scriptLines.length) return;
       currentLineIdx = (currentLineIdx - 1 + scriptLines.length) % scriptLines.length;
-      renderScriptLinesUI();
+      parseScriptLines();
     });
-
     document.getElementById('btnNextLine').addEventListener('click', () => {
-      if (scriptLines.length === 0) return;
+      if (!scriptLines.length) return;
       currentLineIdx = (currentLineIdx + 1) % scriptLines.length;
-      renderScriptLinesUI();
+      parseScriptLines();
+    });
+    document.getElementById('btnClearScript').addEventListener('click', () => {
+      document.getElementById('scriptInput').value = '';
+      saveCurrentStorySlot();
+      parseScriptLines();
+    });
+    document.getElementById('btnAutoPlayScript').addEventListener('click', (e) => {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+        e.target.textContent = '▶ Auto-Step (5s)';
+      } else {
+        autoPlayTimer = setInterval(() => {
+          if (scriptLines.length > 0) {
+            currentLineIdx = (currentLineIdx + 1) % scriptLines.length;
+            parseScriptLines();
+          }
+        }, 5000);
+        e.target.textContent = '⏹ Stop Auto';
+      }
     });
 
-    // Speech Recognition Setup
-    function startSpeechRecognition() {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        alert('Live Speech-to-Text is not supported in this browser view. Use Typed Script mode.');
+    // ----------------------------------------------------------------------------
+    // 6. VIRTUAL 3D NEWSROOM BACKGROUND + REAL-TIME CHROMA KEY ENGINE
+    // ----------------------------------------------------------------------------
+    function drawVirtual3DNewsroom(x, y, w, h) {
+      if (customStudioBgImg) {
+        ctx.drawImage(customStudioBgImg, x, y, w, h);
         return;
       }
-      if (recognition) {
-        try { recognition.stop(); } catch (e) {}
+      // Animated Cyber Newsroom Background
+      const grad = ctx.createRadialGradient(x + w / 2, y + h / 2, 40, x + w / 2, y + h / 2, Math.max(w, h));
+      grad.addColorStop(0, '#0f172a');
+      grad.addColorStop(0.6, '#1e1b4b');
+      grad.addColorStop(1, '#020617');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, w, h);
+
+      // Animated Perspective Grid Lines
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.clip();
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.16)';
+      ctx.lineWidth = 1;
+      const offset = (Date.now() / 40) % 40;
+      for (let gx = x; gx < x + w; gx += 40) {
+        ctx.beginPath();
+        ctx.moveTo(gx + offset, y);
+        ctx.lineTo(gx + offset, y + h);
+        ctx.stroke();
       }
-      recognition = new SpeechRec();
-      recognition.lang = document.getElementById('sttLang').value;
-      recognition.continuous = true;
-      recognition.interimResults = true;
+      for (let gy = y; gy < y + h; gy += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, gy);
+        ctx.lineTo(x + w, gy);
+        ctx.stroke();
+      }
 
-      recognition.onresult = (event) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        liveSpokenSubtitle = transcript.trim();
-      };
-
-      recognition.onend = () => {
-        if (subtitleMode === 'SPEECH') {
-          try { recognition.start(); } catch (e) {}
-        }
-      };
-
-      try { recognition.start(); } catch (e) {}
+      // Rotating Cyber Globe Rings in Center
+      const cx = x + w / 2;
+      const cy = y + h * 0.42;
+      const t = Date.now() / 1200;
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+      ctx.lineWidth = 2;
+      for (let r = 45; r <= 135; r += 45) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, t, t + Math.PI * 1.4);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
 
-    document.getElementById('btnModeScript').addEventListener('click', () => {
-      subtitleMode = 'SCRIPT';
-      document.getElementById('btnModeScript').className = 'bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded';
-      document.getElementById('btnModeSpeech').className = 'bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1 rounded';
-      if (recognition) { try { recognition.stop(); } catch (e) {} }
-    });
+    function drawPrimaryCameraWithChroma(x, y, w, h) {
+      // Draw Virtual Newsroom behind anchor first if Chroma Key is checked
+      if (document.getElementById('chkChromaKey').checked) {
+        drawVirtual3DNewsroom(x, y, w, h);
+      }
 
-    document.getElementById('btnModeSpeech').addEventListener('click', () => {
-      subtitleMode = 'SPEECH';
-      document.getElementById('btnModeSpeech').className = 'bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded';
-      document.getElementById('btnModeScript').className = 'bg-slate-800 text-slate-300 text-xs font-bold px-2.5 py-1 rounded';
-      startSpeechRecognition();
-    });
+      const vw = vidPrimary.videoWidth || 1280;
+      const vh = vidPrimary.videoHeight || 720;
+      const baseScale = Math.max(w / vw, h / vh) * camZoom;
+      const dw = vw * baseScale;
+      const dh = vh * baseScale;
+      const dx = x + (w - dw) / 2;
+      const dy = y + (h - dh) / 2;
+      const isMirror = customMirrorOverride !== null ? customMirrorOverride : (currentFacingMode === 'user');
 
-    // ----------------------------------------------------------------------------
-    // 3. 60FPS HD CANVAS COMPOSITOR (BURNS ALL GRAPHICS INTO RECORDED VIDEO)
-    // ----------------------------------------------------------------------------
-    function drawVideoCover(vid, x, y, w, h, mirror = false) {
-      if (!vid || vid.readyState < 2) {
-        ctx.fillStyle = '#0f172a';
-        ctx.fillRect(x, y, w, h);
-        ctx.fillStyle = '#475569';
-        ctx.font = 'bold 20px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('CAMERA FEED STANDBY', x + w / 2, y + h / 2);
+      if (!document.getElementById('chkChromaKey').checked) {
+        if (camBrightness !== 100) ctx.filter = `brightness(${camBrightness}%) contrast(105%)`;
+        if (isMirror) {
+          ctx.translate(x + w, y);
+          ctx.scale(-1, 1);
+          ctx.drawImage(vidPrimary, -(dx - x), dy - y, dw, dh);
+        } else {
+          ctx.drawImage(vidPrimary, dx, dy, dw, dh);
+        }
+        ctx.filter = 'none';
         return;
       }
+
+      // Real-time Pixel Chroma Keying via offscreen 640x360 buffer
+      chromaCtx.drawImage(vidPrimary, 0, 0, 640, 360);
+      const frame = chromaCtx.getImageData(0, 0, 640, 360);
+      const data = frame.data;
+      const thresh = parseInt(document.getElementById('chromaThreshold').value, 10);
+      const mode = document.getElementById('chromaColorMode').value;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        if (mode === 'GREEN') {
+          if (g > 90 && g - r > thresh && g - b > thresh) {
+            data[i + 3] = 0;
+          }
+        } else {
+          if (b > 90 && b - r > thresh && b - g > thresh) {
+            data[i + 3] = 0;
+          }
+        }
+      }
+      chromaCtx.putImageData(frame, 0, 0);
+
+      if (isMirror) {
+        ctx.translate(x + w, y);
+        ctx.scale(-1, 1);
+        ctx.drawImage(chromaCanvas, -(dx - x), dy - y, dw, dh);
+      } else {
+        ctx.drawImage(chromaCanvas, dx, dy, dw, dh);
+      }
+    }
+
+    function drawSourceInBox(sourceType, x, y, w, h, nameTag = '') {
       ctx.save();
       ctx.beginPath();
       ctx.rect(x, y, w, h);
       ctx.clip();
 
-      const vw = vid.videoWidth || 1280;
-      const vh = vid.videoHeight || 720;
-      const scale = Math.max(w / vw, h / vh);
-      const dw = vw * scale;
-      const dh = vh * scale;
-      const dx = x + (w - dw) / 2;
-      const dy = y + (h - dh) / 2;
+      if (sourceType === 'PRIMARY') {
+        if (!vidPrimary || vidPrimary.readyState < 2 || !isCamRunning) {
+          drawVirtual3DNewsroom(x, y, w, h);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 18px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('ANCHOR CAM STANDBY', x + w / 2, y + h / 2);
+        } else {
+          drawPrimaryCameraWithChroma(x, y, w, h);
+        }
+      } else if (sourceType === 'SECONDARY') {
+        if (secondaryMediaMode === 'PHOTOS' && photoSlides[currentPhotoIdx]) {
+          const img = photoSlides[currentPhotoIdx];
+          const iw = img.width || 800;
+          const ih = img.height || 600;
+          const scale = Math.max(w / iw, h / ih);
+          ctx.drawImage(img, x + (w - iw * scale) / 2, y + (h - ih * scale) / 2, iw * scale, ih * scale);
+        } else if (vidSecondary && vidSecondary.readyState >= 2 && vidSecondary.src) {
+          const vw = vidSecondary.videoWidth || 1280;
+          const vh = vidSecondary.videoHeight || 720;
+          const scale = Math.max(w / vw, h / vh);
+          ctx.drawImage(vidSecondary, x + (w - vw * scale) / 2, y + (h - vh * scale) / 2, vw * scale, vh * scale);
+        } else {
+          drawVirtual3DNewsroom(x, y, w, h);
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = 'bold 17px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('PANEL 2 / GROUND FEED', x + w / 2, y + h / 2);
+        }
+      } else if (sourceType === 'PHOTO_PANEL') {
+        if (photoSlides[currentPhotoIdx]) {
+          const img = photoSlides[currentPhotoIdx];
+          const iw = img.width || 800;
+          const ih = img.height || 600;
+          const scale = Math.max(w / iw, h / ih);
+          ctx.drawImage(img, x + (w - iw * scale) / 2, y + (h - ih * scale) / 2, iw * scale, ih * scale);
+        } else {
+          drawVirtual3DNewsroom(x, y, w, h);
+          ctx.fillStyle = '#facc15';
+          ctx.font = 'bold 16px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('PANEL 3 / EVIDENCE', x + w / 2, y + h / 2);
+        }
+      }
 
-      if (mirror) {
-        ctx.translate(x + w, y);
-        ctx.scale(-1, 1);
-        ctx.drawImage(vid, -(dx - x), dy - y, dw, dh);
-      } else {
-        ctx.drawImage(vid, dx, dy, dw, dh);
+      // Draw Debate Speaker Name Plate if provided
+      if (nameTag) {
+        ctx.fillStyle = 'rgba(9, 13, 22, 0.88)';
+        ctx.fillRect(x + 12, y + h - 44, Math.min(w - 24, 260), 32);
+        ctx.fillStyle = activeTheme.primary;
+        ctx.fillRect(x + 12, y + h - 44, 6, 32);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px Noto Sans Devanagari, Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(nameTag, x + 26, y + h - 22, Math.min(w - 40, 240));
       }
       ctx.restore();
     }
 
+    // ----------------------------------------------------------------------------
+    // 7. MASTER 60FPS BROADCAST COMPOSITOR LOOP
+    // ----------------------------------------------------------------------------
     function renderBroadcastFrame() {
-      ctx.clearRect(0, 0, 1280, 720);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, cw, ch);
 
-      const v1 = swapFeeds ? vidSecondary : vidPrimary;
-      const v2 = swapFeeds ? vidPrimary : vidSecondary;
-      const mirrorV1 = (!swapFeeds && currentFacingMode === 'user');
-      const mirrorV2 = (swapFeeds && currentFacingMode === 'user');
+      const firstFeed = swapFeeds ? 'SECONDARY' : 'PRIMARY';
+      const secondFeed = swapFeeds ? 'PRIMARY' : 'SECONDARY';
+      const anchorName = document.getElementById('inpReporter').value || 'Abhishek Kumar Sah';
+      const guestName = document.getElementById('inpGuestName').value || 'Ground Zero';
 
-      // 1. Draw Video Layout
+      // 1. Render Selected Multi-Camera / Debate Layout
+      const contentTop = 44;
+      const contentH = ch - 186;
+
       if (currentLayout === 'FULL_PRIMARY') {
-        drawVideoCover(v1, 0, 0, 1280, 720, mirrorV1);
+        drawSourceInBox(firstFeed, 0, 0, cw, ch);
       } else if (currentLayout === 'FULL_SECONDARY') {
-        drawVideoCover(v2, 0, 0, 1280, 720, mirrorV2);
+        drawSourceInBox(secondFeed, 0, 0, cw, ch);
       } else if (currentLayout === 'PIP') {
-        drawVideoCover(v1, 0, 0, 1280, 720, mirrorV1);
-        // Picture-in-Picture Window (Top Right)
-        ctx.save();
-        ctx.strokeStyle = '#ef4444';
+        drawSourceInBox(firstFeed, 0, 0, cw, ch);
+        const pipW = isVerticalShorts ? 260 : 370;
+        const pipH = isVerticalShorts ? 340 : 215;
+        const pipX = cw - pipW - 24;
+        const pipY = 64;
+        drawSourceInBox(secondFeed, pipX, pipY, pipW, pipH, guestName);
+        ctx.strokeStyle = activeTheme.primary;
         ctx.lineWidth = 4;
-        drawVideoCover(v2, 880, 66, 368, 208, mirrorV2);
-        ctx.strokeRect(880, 66, 368, 208);
-        ctx.restore();
+        ctx.strokeRect(pipX, pipY, pipW, pipH);
       } else if (currentLayout === 'SPLIT') {
-        drawVideoCover(v1, 0, 0, 638, 720, mirrorV1);
-        drawVideoCover(v2, 642, 0, 638, 720, mirrorV2);
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(638, 0, 4, 720);
+        // Professional TV 2-Window Debate Frame
+        drawVirtual3DNewsroom(0, 0, cw, ch);
+        if (isVerticalShorts) {
+          const boxH = (contentH - 20) / 2;
+          drawSourceInBox(firstFeed, 24, contentTop + 12, cw - 48, boxH, anchorName);
+          drawSourceInBox(secondFeed, 24, contentTop + 24 + boxH, cw - 48, boxH, guestName);
+          ctx.strokeStyle = activeSpeaker === 1 ? '#facc15' : '#334155';
+          ctx.lineWidth = activeSpeaker === 1 ? 5 : 2;
+          ctx.strokeRect(24, contentTop + 12, cw - 48, boxH);
+          ctx.strokeStyle = activeSpeaker === 2 ? '#facc15' : '#334155';
+          ctx.lineWidth = activeSpeaker === 2 ? 5 : 2;
+          ctx.strokeRect(24, contentTop + 24 + boxH, cw - 48, boxH);
+        } else {
+          const boxW = (cw - 64) / 2;
+          const boxY = 122;
+          const boxH = 380;
+          drawSourceInBox(firstFeed, 24, boxY, boxW, boxH, anchorName);
+          drawSourceInBox(secondFeed, 40 + boxW, boxY, boxW, boxH, guestName);
+
+          ctx.strokeStyle = activeSpeaker === 1 ? '#facc15' : activeTheme.primary;
+          ctx.lineWidth = activeSpeaker === 1 ? 6 : 3;
+          ctx.strokeRect(24, boxY, boxW, boxH);
+
+          ctx.strokeStyle = activeSpeaker === 2 ? '#facc15' : activeTheme.primary;
+          ctx.lineWidth = activeSpeaker === 2 ? 6 : 3;
+          ctx.strokeRect(40 + boxW, boxY, boxW, boxH);
+        }
+      } else if (currentLayout === 'TRIPLE') {
+        // 3-Window TV Debate Panel
+        drawVirtual3DNewsroom(0, 0, cw, ch);
+        const boxW = (cw - 80) / 3;
+        const boxY = 130;
+        const boxH = 365;
+        drawSourceInBox('PRIMARY', 20, boxY, boxW, boxH, anchorName);
+        drawSourceInBox('SECONDARY', 40 + boxW, boxY, boxW, boxH, guestName);
+        drawSourceInBox('PHOTO_PANEL', 60 + boxW * 2, boxY, boxW, boxH, document.getElementById('inpLocation').value);
+
+        [1, 2, 3].forEach((n, idx) => {
+          const bx = 20 + idx * (boxW + 20);
+          ctx.strokeStyle = activeSpeaker === n ? '#facc15' : activeTheme.primary;
+          ctx.lineWidth = activeSpeaker === n ? 6 : 3;
+          ctx.strokeRect(bx, boxY, boxW, boxH);
+        });
       }
 
-      // 2. Top Contact & Station Header Bar
-      ctx.fillStyle = 'rgba(9, 13, 22, 0.88)';
-      ctx.fillRect(0, 0, 1280, 42);
-      ctx.fillStyle = '#ef4444';
-      ctx.fillRect(0, 42, 1280, 3);
+      // 2. Side "Key Highlights / Bullet Points" Graphic Card (Aaj Tak Style)
+      if (document.getElementById('chkShowBullets').checked) {
+        const bulletsRaw = document.getElementById('inpBullets').value || '';
+        const bLines = bulletsRaw.split('\n').map(s => s.trim()).filter(Boolean);
+        if (bLines.length > 0) {
+          const cardW = isVerticalShorts ? cw - 48 : 420;
+          const cardX = isVerticalShorts ? 24 : cw - cardW - 24;
+          const cardY = 130;
+          const cardH = 54 + bLines.length * 46;
 
-      const contactStr = document.getElementById('inpContact').value;
-      ctx.fillStyle = '#e2e8f0';
-      ctx.font = '600 15px Inter, Noto Sans Devanagari, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(contactStr, 24, 27);
-
-      // Live Clock (IST)
-      const nowStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      ctx.fillStyle = '#facc15';
-      ctx.font = 'bold 16px JetBrains Mono, monospace';
-      ctx.textAlign = 'right';
-      ctx.fillText('LIVE IST ' + nowStr, 1256, 27);
-
-      // 3. Top-Left Channel Bug & Reporter Pill
-      const channelName = document.getElementById('inpChannel').value || 'ABHISHEK DIGITAL NEWS';
-      const reporterName = document.getElementById('inpReporter').value || 'Abhishek Kumar Sah';
-      const locationName = document.getElementById('inpLocation').value || 'Raxaul, Bihar';
-
-      ctx.fillStyle = '#dc2626';
-      ctx.fillRect(24, 58, 290, 38);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 18px Inter, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(channelName, 36, 83);
-
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-      ctx.fillRect(24, 96, 290, 28);
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 13px Inter, sans-serif';
-      ctx.fillText(`🎤 ${reporterName} | 📍 ${locationName}`, 34, 115);
-
-      // 4. Live Subtitle Overlay Box (Above Lower Thirds)
-      if (document.getElementById('chkShowSubtitles').checked) {
-        const subText = subtitleMode === 'SPEECH'
-          ? (liveSpokenSubtitle || 'Listening for live speech...')
-          : (scriptLines[currentLineIdx] || '');
-
-        if (subText) {
           ctx.save();
-          ctx.font = 'bold 25px Noto Sans Devanagari, Inter, sans-serif';
-          ctx.textAlign = 'center';
-          const maxWidth = 1140;
-          const metrics = ctx.measureText(subText);
-          const boxW = Math.min(1180, Math.max(420, metrics.width + 60));
-          const boxX = (1280 - boxW) / 2;
-          const boxY = 515;
+          ctx.fillStyle = 'rgba(9, 13, 22, 0.92)';
+          ctx.fillRect(cardX, cardY, cardW, cardH);
+          ctx.strokeStyle = activeTheme.primary;
+          ctx.lineWidth = 3;
+          ctx.strokeRect(cardX, cardY, cardW, cardH);
 
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.82)';
-          ctx.fillRect(boxX, boxY, boxW, 52);
-          ctx.strokeStyle = '#facc15';
-          ctx.lineWidth = 2;
-          ctx.strokeRect(boxX, boxY, boxW, 52);
+          ctx.fillStyle = activeTheme.primary;
+          ctx.fillRect(cardX, cardY, cardW, 38);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '900 17px Noto Sans Devanagari, Inter, sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('📌 ' + (document.getElementById('inpBulletTitle').value || 'KEY HIGHLIGHTS'), cardX + 14, cardY + 25);
 
-          ctx.fillStyle = '#fef08a';
-          ctx.fillText(subText, 640, boxY + 35, maxWidth);
+          ctx.font = 'bold 17px Noto Sans Devanagari, Inter, sans-serif';
+          bLines.forEach((line, i) => {
+            const ly = cardY + 68 + i * 44;
+            ctx.fillStyle = activeTheme.accent;
+            ctx.fillText('▶', cardX + 14, ly);
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillText(line, cardX + 38, ly, cardW - 52);
+          });
           ctx.restore();
         }
       }
 
-      // 5. Lower-Third Breaking News Banner
-      const badgeText = document.getElementById('inpBadge').value || 'BREAKING NEWS';
-      const headlineText = document.getElementById('inpHeadline').value || '';
+      // 3. Top Contact Bar & Live IST Clock + Weather Badge
+      if (document.getElementById('chkShowTopBar').checked) {
+        ctx.fillStyle = 'rgba(9, 13, 22, 0.92)';
+        ctx.fillRect(0, 0, cw, 40);
+        ctx.fillStyle = activeTheme.primary;
+        ctx.fillRect(0, 40, cw, 3);
+        ctx.fillStyle = '#f1f5f9';
+        ctx.font = isVerticalShorts ? '600 11px Inter, sans-serif' : '600 14px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(document.getElementById('inpContact').value, 16, 25, cw - 280);
+      }
 
-      // Badge Tab
-      ctx.fillStyle = '#b91c1c';
-      ctx.fillRect(24, 580, 220, 34);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 17px Inter, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('⚡ ' + badgeText, 36, 603);
+      if (document.getElementById('chkShowClock').checked) {
+        const nowStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const weatherStr = document.getElementById('inpWeather').value || '29°C Raxaul';
+        ctx.fillStyle = 'rgba(9, 13, 22, 0.9)';
+        ctx.fillRect(cw - 265, 5, 252, 30);
+        ctx.fillStyle = activeTheme.accent;
+        ctx.font = 'bold 13px JetBrains Mono, Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(`🌤️ ${weatherStr} | 🔴 ${nowStr}`, cw - 18, 25);
+      }
 
-      // Main Headline Plate
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-      ctx.fillRect(24, 614, 1232, 54);
-      ctx.fillStyle = '#ef4444';
-      ctx.fillRect(24, 614, 8, 54);
+      // 4. Channel Logo & Reporter Badge
+      if (document.getElementById('chkShowBug').checked) {
+        const channelName = document.getElementById('inpChannel').value || 'ABHISHEK DIGITAL NEWS';
+        const locationName = document.getElementById('inpLocation').value || 'Raxaul, Bihar';
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '800 24px Noto Sans Devanagari, Inter, sans-serif';
-      ctx.fillText(headlineText, 46, 649, 1190);
+        let textOffsetX = 20;
+        if (customLogoImg) {
+          ctx.drawImage(customLogoImg, 20, 52, 58, 58);
+          textOffsetX = 84;
+        }
+        ctx.fillStyle = activeTheme.primary;
+        ctx.fillRect(textOffsetX, 52, 285, 34);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 16px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(channelName, textOffsetX + 10, 75, 265);
 
-      // 6. Bottom Scrolling Ticker Tape
-      ctx.fillStyle = '#7f1d1d';
-      ctx.fillRect(0, 676, 1280, 44);
-      ctx.fillStyle = '#facc15';
-      ctx.fillRect(0, 676, 155, 44);
-      ctx.fillStyle = '#090d16';
-      ctx.font = '900 17px Inter, sans-serif';
-      ctx.fillText('LIVE UPDATES', 16, 704);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.fillRect(textOffsetX, 86, 285, 25);
+        ctx.fillStyle = activeTheme.accent;
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.fillText(`🎤 ${anchorName} | 📍 ${locationName}`, textOffsetX + 8, 103, 270);
+      }
 
-      const tickerText = document.getElementById('inpTicker').value || '';
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(155, 676, 1125, 44);
-      ctx.clip();
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 20px Noto Sans Devanagari, Inter, sans-serif';
-      ctx.fillText(tickerText, tickerX, 705);
-      ctx.restore();
+      // 5. Live Subtitles Box
+      const lowerThirdY = ch - 142;
+      if (document.getElementById('chkShowSubtitles').checked) {
+        const subText = subtitleMode === 'SPEECH'
+          ? (liveSpokenSubtitle || '🎤 लाइव सबटाइटल चालू है...')
+          : (scriptLines[currentLineIdx] || '');
 
-      const tickerWidth = ctx.measureText(tickerText).width;
-      tickerX -= 2.6;
-      if (tickerX < -tickerWidth) {
-        tickerX = 1280;
+        if (subText) {
+          ctx.save();
+          ctx.font = isVerticalShorts ? 'bold 20px Noto Sans Devanagari, sans-serif' : 'bold 24px Noto Sans Devanagari, sans-serif';
+          ctx.textAlign = 'center';
+          const boxW = cw - 40;
+          const boxY = document.getElementById('chkShowLowerThird').checked ? (lowerThirdY - 60) : (ch - 120);
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.86)';
+          ctx.fillRect(20, boxY, boxW, 50);
+          ctx.strokeStyle = activeTheme.accent;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(20, boxY, boxW, 50);
+
+          ctx.fillStyle = '#fef08a';
+          ctx.fillText(subText, cw / 2, boxY + 33, boxW - 24);
+          ctx.restore();
+        }
+      }
+
+      // 6. Lower-Third Breaking Headline Bar
+      if (document.getElementById('chkShowLowerThird').checked) {
+        const badgeText = document.getElementById('inpBadge').value || 'BREAKING NEWS';
+        const headlineText = document.getElementById('inpHeadline').value || '';
+
+        ctx.fillStyle = activeTheme.badge;
+        ctx.fillRect(20, lowerThirdY, 220, 32);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 16px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('⚡ ' + badgeText, 30, lowerThirdY + 22);
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.96)';
+        ctx.fillRect(20, lowerThirdY + 32, cw - 40, 52);
+        ctx.fillStyle = activeTheme.primary;
+        ctx.fillRect(20, lowerThirdY + 32, 8, 52);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = isVerticalShorts ? '800 19px Noto Sans Devanagari, sans-serif' : '800 23px Noto Sans Devanagari, sans-serif';
+        ctx.fillText(headlineText, 40, lowerThirdY + 66, cw - 75);
+      }
+
+      // 7. Bottom Scrolling Ticker Tape
+      if (document.getElementById('chkShowTicker').checked) {
+        const tickY = ch - 44;
+        ctx.fillStyle = activeTheme.dark;
+        ctx.fillRect(0, tickY, cw, 44);
+        ctx.fillStyle = activeTheme.accent;
+        ctx.fillRect(0, tickY, 148, 44);
+        ctx.fillStyle = '#090d16';
+        ctx.font = '900 16px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('LIVE UPDATES', 14, tickY + 28);
+
+        const tickerText = document.getElementById('inpTicker').value || '';
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(148, tickY, cw - 148, 44);
+        ctx.clip();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 19px Noto Sans Devanagari, sans-serif';
+        ctx.fillText(tickerText, tickerX, tickY + 29);
+        ctx.restore();
+
+        const tw = ctx.measureText(tickerText).width;
+        tickerX -= 2.8;
+        if (tickerX < -tw) tickerX = cw;
+      }
+
+      // 8. Render Live Telestrator Marker Drawings (Red Circle / Arrows)
+      if (penStrokes.length > 0) {
+        ctx.save();
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 6;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = '#dc2626';
+        ctx.shadowBlur = 8;
+        penStrokes.forEach(stroke => {
+          if (stroke.length < 2) return;
+          ctx.beginPath();
+          ctx.moveTo(stroke[0].x, stroke[0].y);
+          for (let i = 1; i < stroke.length; i++) {
+            ctx.lineTo(stroke[i].x, stroke[i].y);
+          }
+          ctx.stroke();
+        });
+        ctx.restore();
+      }
+
+      // 9. FULL-SCREEN BREAKING FLASH ALERT
+      if (Date.now() < breakingFlashUntil) {
+        ctx.save();
+        const pulse = Math.abs(Math.sin(Date.now() / 120));
+        ctx.fillStyle = `rgba(185, 28, 28, ${0.84 + pulse * 0.12})`;
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(24, 24, cw - 48, ch - 48);
+        ctx.fillStyle = '#facc15';
+        ctx.font = isVerticalShorts ? '900 44px Inter, sans-serif' : '900 64px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🚨 BREAKING NEWS 🚨', cw / 2, ch / 2 - 20);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = isVerticalShorts ? '800 24px Noto Sans Devanagari, sans-serif' : '800 32px Noto Sans Devanagari, sans-serif';
+        ctx.fillText(document.getElementById('inpHeadline').value, cw / 2, ch / 2 + 45, cw - 90);
+        ctx.restore();
+      }
+
+      // 10. 5-SECOND TV COUNTDOWN INTRO SLATE
+      if (countdownSecLeft > 0) {
+        drawVirtual3DNewsroom(0, 0, cw, ch);
+        ctx.save();
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(cw / 2, ch / 2, 110, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 110px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(String(countdownSecLeft), cw / 2, ch / 2 + 38);
+
+        ctx.fillStyle = '#facc15';
+        ctx.font = '900 28px Inter, sans-serif';
+        ctx.fillText(document.getElementById('inpChannel').value, cw / 2, ch / 2 - 145);
+        ctx.restore();
+      }
+
+      // 11. END BROADCAST OUTRO SLATE
+      if (showOutroSlate) {
+        drawVirtual3DNewsroom(0, 0, cw, ch);
+        ctx.save();
+        ctx.fillStyle = '#facc15';
+        ctx.font = isVerticalShorts ? '900 34px Inter, sans-serif' : '900 48px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(document.getElementById('inpChannel').value, cw / 2, ch / 2 - 70);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 26px Noto Sans Devanagari, Inter, sans-serif';
+        ctx.fillText('संपादक एवं रिपोर्टर: अभिषेक कुमार साह (Abhishek Kumar Sah)', cw / 2, ch / 2 - 15);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 22px Inter, sans-serif';
+        ctx.fillText('📍 Mauje, Ward No. 13, Mai Sthan Road, Raxaul, Bihar - 845305', cw / 2, ch / 2 + 35);
+
+        ctx.fillStyle = '#fef08a';
+        ctx.font = '900 26px JetBrains Mono, monospace';
+        ctx.fillText('📞 Mob: 9693539197  |  💬 WhatsApp: 8092912107', cw / 2, ch / 2 + 85);
+
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(cw / 2 - 220, ch / 2 + 115, 440, 44);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 20px Noto Sans Devanagari, sans-serif';
+        ctx.fillText('खबरों और विज्ञापन के लिए संपर्क करें • SUBSCRIBE करें', cw / 2, ch / 2 + 144);
+        ctx.restore();
       }
 
       requestAnimationFrame(renderBroadcastFrame);
     }
 
     // ----------------------------------------------------------------------------
-    // 4. RECORDING & NATIVE CAPACITOR APK EXPORT / SHARE BRIDGE
+    // 8. BULLETPROOF RECORDING & CAPACITOR APK SAVE / SHARE
     // ----------------------------------------------------------------------------
-    document.getElementById('btnRecord').addEventListener('click', () => {
-      if (!isRecording) {
-        startBroadcastRecording();
-      } else {
-        stopBroadcastRecording();
+    function getBestSupportedMimeType() {
+      const candidates = [
+        { mime: 'video/mp4;codecs=avc1,mp4a.40.2', ext: 'mp4' },
+        { mime: 'video/mp4', ext: 'mp4' },
+        { mime: 'video/webm;codecs=h264,opus', ext: 'webm' },
+        { mime: 'video/webm;codecs=vp8,opus', ext: 'webm' },
+        { mime: 'video/webm', ext: 'webm' }
+      ];
+      for (const c of candidates) {
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported(c.mime)) return c;
+      }
+      return { mime: '', ext: 'webm' };
+    }
+
+    document.getElementById('btnRecord').addEventListener('click', async () => {
+      if (!isRecording) await startBroadcastRecording();
+      else stopBroadcastRecording();
+    });
+
+    document.getElementById('btnPauseRec').addEventListener('click', () => {
+      if (!mediaRecorder || !isRecording) return;
+      if (mediaRecorder.state === 'recording') {
+        mediaRecorder.pause();
+        isRecPaused = true;
+        document.getElementById('btnPauseRec').textContent = '▶ Resume';
+      } else if (mediaRecorder.state === 'paused') {
+        mediaRecorder.resume();
+        isRecPaused = false;
+        document.getElementById('btnPauseRec').textContent = '⏸ Pause';
       }
     });
 
-    function startBroadcastRecording() {
+    async function startBroadcastRecording() {
+      await ensureMasterAudioEngine();
       recordedChunks = [];
-      const canvasStream = canvas.captureStream(30); // 30fps HD stream
-      const combinedTracks = [...canvasStream.getVideoTracks()];
-
+      const canvasStream = canvas.captureStream(30);
+      const tracks = [...canvasStream.getVideoTracks()];
       if (destNode && destNode.stream.getAudioTracks().length > 0) {
-        combinedTracks.push(...destNode.stream.getAudioTracks());
-      } else if (micStream && micStream.getAudioTracks().length > 0) {
-        combinedTracks.push(...micStream.getAudioTracks());
+        tracks.push(...destNode.stream.getAudioTracks());
       }
+      const combinedStream = new MediaStream(tracks);
+      const chosen = getBestSupportedMimeType();
+      lastRecordedExt = chosen.ext;
+      const bps = parseInt(document.getElementById('recBitrateSelect').value, 10) || 2500000;
 
-      const finalStream = new MediaStream(combinedTracks);
-      let mimeType = 'video/webm;codecs=vp8,opus';
-      if (MediaRecorder.isTypeSupported('video/mp4')) {
-        mimeType = 'video/mp4';
-      } else if (MediaRecorder.isTypeSupported('video/webm;codecs=h264')) {
-        mimeType = 'video/webm;codecs=h264';
+      try {
+        mediaRecorder = new MediaRecorder(combinedStream, chosen.mime ? { mimeType: chosen.mime, videoBitsPerSecond: bps } : { videoBitsPerSecond: bps });
+      } catch (e) {
+        mediaRecorder = new MediaRecorder(combinedStream);
       }
-
-      mediaRecorder = new MediaRecorder(finalStream, {
-        mimeType,
-        videoBitsPerSecond: 3500000 // 3.5 Mbps crisp HD
-      });
 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) recordedChunks.push(e.data);
       };
 
       mediaRecorder.onstop = () => {
-        lastRecordedBlob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/webm' });
+        lastRecordedBlob = new Blob(recordedChunks, { type: chosen.mime || 'video/webm' });
         const sizeMB = (lastRecordedBlob.size / (1024 * 1024)).toFixed(2);
-        document.getElementById('clipSizeBadge').textContent = `${sizeMB} MB Ready`;
+        previewPlayer.src = URL.createObjectURL(lastRecordedBlob);
+        previewPlayer.classList.remove('hidden');
+        previewPlayer.load();
+
         document.getElementById('btnSaveVideo').disabled = false;
         document.getElementById('btnShareVideo').disabled = false;
-        document.getElementById('exportStatus').textContent = `✅ Broadcast recorded (${sizeMB} MB). Tap Save or Share.`;
+        document.getElementById('btnClearRecorded').disabled = false;
+        document.getElementById('exportStatus').textContent = `✅ Ready (${sizeMB} MB ${lastRecordedExt.toUpperCase()}). Play above or Save/Share.`;
       };
 
-      mediaRecorder.start(1000);
+      mediaRecorder.start(500);
       isRecording = true;
-      recStartTime = Date.now();
+      isRecPaused = false;
+      recSeconds = 0;
+
       document.getElementById('recIndicator').classList.remove('hidden');
       document.getElementById('recIndicator').classList.add('flex');
+      document.getElementById('btnPauseRec').classList.remove('hidden');
       document.getElementById('btnRecord').textContent = '⏹ STOP';
-      document.getElementById('btnRecord').className = 'bg-slate-800 hover:bg-slate-700 text-red-400 border border-red-500 font-extrabold text-xs px-3.5 py-2 rounded-lg';
 
       recInterval = setInterval(() => {
-        const sec = Math.floor((Date.now() - recStartTime) / 1000);
-        const m = String(Math.floor(sec / 60)).padStart(2, '0');
-        const s = String(sec % 60).padStart(2, '0');
-        document.getElementById('recTimer').textContent = `${m}:${s}`;
-      }, 500);
+        if (!isRecPaused) {
+          recSeconds++;
+          const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+          const s = String(recSeconds % 60).padStart(2, '0');
+          document.getElementById('recTimer').textContent = `${m}:${s}`;
+        }
+      }, 1000);
     }
 
     function stopBroadcastRecording() {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        try { mediaRecorder.requestData(); } catch (e) {}
         mediaRecorder.stop();
       }
       isRecording = false;
       clearInterval(recInterval);
       document.getElementById('recIndicator').classList.add('hidden');
       document.getElementById('recIndicator').classList.remove('flex');
+      document.getElementById('btnPauseRec').classList.add('hidden');
       document.getElementById('btnRecord').textContent = '⏺ REC';
-      document.getElementById('btnRecord').className = 'bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-lg shadow-lg shadow-red-600/30';
     }
 
-    // Helper: Convert Blob to Base64 for Native Capacitor Filesystem
+    document.getElementById('btnClearRecorded').addEventListener('click', () => {
+      lastRecordedBlob = null;
+      recordedChunks = [];
+      previewPlayer.pause();
+      previewPlayer.removeAttribute('src');
+      previewPlayer.classList.add('hidden');
+      document.getElementById('btnSaveVideo').disabled = true;
+      document.getElementById('btnShareVideo').disabled = true;
+      document.getElementById('btnClearRecorded').disabled = true;
+    });
+
     function blobToBase64(blob) {
       return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64data = reader.result.split(',')[1];
-          resolve(base64data);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
+        const r = new FileReader();
+        r.onloadend = () => resolve(r.result.split(',')[1]);
+        r.onerror = reject;
+        r.readAsDataURL(blob);
       });
     }
 
-    // Save / Download Video (Works on both Web & Capacitor Native Android APK)
     document.getElementById('btnSaveVideo').addEventListener('click', async () => {
       if (!lastRecordedBlob) return;
-      const ext = lastRecordedBlob.type.includes('mp4') ? 'mp4' : 'webm';
-      const fileName = `Abhishek_Digital_News_${Date.now()}.${ext}`;
-
-      // Check if running inside Capacitor Native APK
+      const fileName = `Abhishek_Digital_News_${Date.now()}.${lastRecordedExt}`;
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
         try {
-          document.getElementById('exportStatus').textContent = '⏳ Saving to Android Documents folder...';
           const base64Data = await blobToBase64(lastRecordedBlob);
-          const savedFile = await window.Capacitor.Plugins.Filesystem.writeFile({
-            path: fileName,
-            data: base64Data,
-            directory: 'DOCUMENTS'
-          });
-          document.getElementById('exportStatus').textContent = `✅ Saved to Documents/${fileName}`;
-          alert(`Broadcast Saved Successfully!\nFile: Documents/${fileName}`);
+          await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: base64Data, directory: 'DOCUMENTS' });
+          alert(`✅ Saved: Documents/${fileName}`);
           return;
-        } catch (err) {
-          console.warn('Capacitor Filesystem fallback:', err);
-        }
+        } catch (err) {}
       }
-
-      // Standard Browser Fallback Download
-      const url = URL.createObjectURL(lastRecordedBlob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = URL.createObjectURL(lastRecordedBlob);
       a.download = fileName;
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
     });
 
-    // Share Video Directly to WhatsApp / YouTube / Android Share Sheet
     document.getElementById('btnShareVideo').addEventListener('click', async () => {
       if (!lastRecordedBlob) return;
-      const ext = lastRecordedBlob.type.includes('mp4') ? 'mp4' : 'webm';
-      const fileName = `Abhishek_Digital_News_${Date.now()}.${ext}`;
-
-      // 1. Native Capacitor Share Plugin (Android APK)
+      const fileName = `Abhishek_Digital_News_${Date.now()}.${lastRecordedExt}`;
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem && window.Capacitor.Plugins.Share) {
         try {
-          document.getElementById('exportStatus').textContent = '⏳ Preparing Android Share Sheet...';
           const base64Data = await blobToBase64(lastRecordedBlob);
-          const tempFile = await window.Capacitor.Plugins.Filesystem.writeFile({
-            path: fileName,
-            data: base64Data,
-            directory: 'CACHE'
-          });
+          const tempFile = await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: base64Data, directory: 'CACHE' });
           await window.Capacitor.Plugins.Share.share({
             title: 'Abhishek Digital News Broadcast',
             text: document.getElementById('inpHeadline').value,
-            url: tempFile.uri,
-            dialogTitle: 'Share Broadcast Video'
-          });
-          document.getElementById('exportStatus').textContent = '✅ Shared via Android Share Sheet.';
-          return;
-        } catch (err) {
-          console.warn('Capacitor Share fallback:', err);
-        }
-      }
-
-      // 2. Web Share API Level 2 (Chrome Android)
-      const fileObj = new File([lastRecordedBlob], fileName, { type: lastRecordedBlob.type });
-      if (navigator.canShare && navigator.canShare({ files: [fileObj] })) {
-        try {
-          await navigator.share({
-            title: 'Abhishek Digital News',
-            text: document.getElementById('inpHeadline').value,
-            files: [fileObj]
+            url: tempFile.uri
           });
           return;
-        } catch (e) {}
+        } catch (err) {}
       }
-
-      // Fallback to Save
       document.getElementById('btnSaveVideo').click();
     });
 
-    // Boot Studio
     window.addEventListener('DOMContentLoaded', () => {
-      loadSavedStudioState();
-      parseScriptLines();
+      loadStorySlot(1);
       renderBroadcastFrame();
     });
   </script>

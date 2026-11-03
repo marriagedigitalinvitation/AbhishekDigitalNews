@@ -12,8 +12,8 @@ if (fs.existsSync(manifestPath)) {
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -34,10 +34,10 @@ if (fs.existsSync(manifestPath)) {
   );
 
   fs.writeFileSync(manifestPath, manifest, 'utf8');
-  console.log('✅ AndroidManifest.xml patched for Camera, Torch, STT & Live Stream.');
+  console.log('✅ AndroidManifest.xml patched.');
 }
 
-// 2. Patch MainActivity.java for Runtime Permissions & WebView Media/Speech Grant
+// 2. Patch MainActivity.java for Runtime Permissions + WebChromeClient Permission Grant
 const mainActivityPath = path.join(
   __dirname,
   'android/app/src/main/java/com/abhishekdigitalnews/studio/MainActivity.java'
@@ -47,9 +47,13 @@ if (fs.existsSync(mainActivityPath)) {
   const activityCode = `package com.abhishekdigitalnews.studio;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.getcapacitor.BridgeActivity;
@@ -62,6 +66,32 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestStudioPermissions();
+        if (this.bridge != null && this.bridge.getWebView() != null) {
+            this.bridge.getWebView().addJavascriptInterface(new NativeTorchBridge(this), "AndroidNativeTorch");
+        }
+    }
+
+    public static class NativeTorchBridge {
+        private final Context ctx;
+        public NativeTorchBridge(Context c) { this.ctx = c; }
+
+        @JavascriptInterface
+        public boolean setTorch(boolean enable) {
+            try {
+                CameraManager cm = (CameraManager) ctx.getSystemService(Context.CAMERA_SERVICE);
+                for (String id : cm.getCameraIdList()) {
+                    CameraCharacteristics cc = cm.getCameraCharacteristics(id);
+                    Boolean hasFlash = cc.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+                    if (hasFlash != null && hasFlash) {
+                        cm.setTorchMode(id, enable);
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                return false;
+            }
+            return false;
+        }
     }
 
     private void requestStudioPermissions() {
@@ -83,5 +113,5 @@ public class MainActivity extends BridgeActivity {
 }
 `;
   fs.writeFileSync(mainActivityPath, activityCode, 'utf8');
-  console.log('✅ MainActivity.java patched.');
+  console.log('✅ MainActivity.java patched with NativeTorchBridge.');
 }

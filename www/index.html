@@ -1,9 +1,10 @@
+<!-- ======================= START OF MODULE 1 OF 4 ======================= -->
 <!DOCTYPE html>
 <html lang="hi" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Abhishek Digital News – v7.0 Master Fixed-Dock PCR Studio</title>
+  <title>Abhishek Digital News – v8.0 Master PCR Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +14,7 @@
       padding: 0;
       width: 100%;
       height: 100dvh;
-      overflow: hidden; /* Prevents the Broadcast Screen from ever scrolling out of view! */
+      overflow: hidden; /* Locks Broadcast Monitor at the top so it NEVER scrolls out of view */
       font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
       background-color: #03060c;
       color: #f8fafc;
@@ -28,129 +29,85 @@
     .ring-light-active {
       box-shadow: inset 0 0 0 18px #ffffff, 0 0 70px 24px rgba(255,255,255,0.95) !important;
     }
-    /* Clean Feed Mode for Direct YouTube / Facebook Mobile Live Screen-Cast */
     body.clean-feed-mode header,
     body.clean-feed-mode #quickSwitcherBar,
     body.clean-feed-mode #scrollableControlDeck {
       display: none !important;
     }
-    body.clean-feed-mode #topPinnedStage {
+    body.clean-feed-mode #topPinnedStage,
+    body.clean-feed-mode #monitorWrapper {
+      width: 100vw !important;
       height: 100dvh !important;
       max-height: 100dvh !important;
       border: none !important;
     }
-    body.clean-feed-mode #monitorWrapper {
-      height: 100dvh !important;
-      max-height: 100dvh !important;
-      border-radius: 0 !important;
-    }
     body.clean-feed-mode #broadcastCanvas {
-      max-height: 100dvh !important;
       width: 100vw !important;
       height: 100dvh !important;
+      max-height: 100dvh !important;
     }
   </style>
 </head>
 <body id="studioBody" class="h-[100dvh] w-full flex flex-col lg:flex-row bg-slate-950 text-slate-100 overflow-hidden">
 
-  <!-- FLOATING EXIT BUTTON FOR CLEAN-FEED LIVE STREAM MODE -->
-  <button id="btnExitCleanFeed" onclick="toggleCleanFeedMode(false)" class="hidden fixed top-3 right-3 z-50 bg-red-600/80 hover:bg-red-600 text-white font-black text-xs px-3 py-1.5 rounded-full shadow-xl border border-white/40 backdrop-blur">
+  <!-- FLOATING EXIT FOR CLEAN-FEED YOUTUBE/FB LIVE STREAM MODE -->
+  <button id="btnExitCleanFeed" onclick="toggleCleanFeedMode(false)" class="hidden fixed top-3 right-3 z-50 bg-red-600 hover:bg-red-500 text-white font-black text-xs px-3 py-1.5 rounded-full shadow-xl border border-white/40">
     ✖ Exit Clean Live View
   </button>
 
-  <!-- =========================================================================
-       PART 1: FIXED / PINNED BROADCAST MONITOR STAGE (NEVER SCROLLS UP OR HIDES!)
-       On Mobile: Locked at the top of the screen.
-       On Desktop (lg): Locked on the left 58% of the screen.
-       ========================================================================= -->
+  <!-- PINNED TOP / LEFT BROADCAST STAGE (NEVER SCROLLS UP OR HIDES) -->
   <div id="topPinnedStage" class="w-full lg:w-[58%] lg:h-full flex-shrink-0 flex flex-col bg-slate-950 border-b-2 lg:border-b-0 lg:border-r border-slate-800 z-30">
 
-    <!-- COMPACT MASTER STUDIO HEADER -->
+    <!-- MASTER STUDIO HEADER -->
     <header class="bg-slate-900/95 border-b border-slate-800 px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1.5">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center font-black text-white shadow text-[11px]">
-          ADN
-        </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-black text-xs sm:text-sm tracking-tight text-white">ABHISHEK DIGITAL NEWS</h1>
-            <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950">v7.0 LOCKED-SCREEN</span>
-          </div>
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center font-black text-white shadow text-[11px]">ADN</div>
+        <div class="flex items-center gap-1.5">
+          <h1 class="font-black text-xs sm:text-sm tracking-tight text-white">ABHISHEK DIGITAL NEWS</h1>
+          <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950">v8.0 MODULAR</span>
         </div>
       </div>
 
-      <!-- TOP INSTANT CAMERA & REC CONTROLS -->
       <div class="flex flex-wrap items-center gap-1">
         <div id="recIndicator" class="hidden items-center gap-1 bg-red-950 border border-red-500/60 px-2 py-0.5 rounded-full">
           <span id="recDot" class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
           <span id="recTimer" class="mono text-[11px] font-bold text-red-200">00:00</span>
         </div>
-
-        <button id="btnAspect" class="bg-purple-600/30 border border-purple-500/40 text-purple-200 font-bold text-[11px] px-2 py-1 rounded">
-          📺 16:9
-        </button>
-
-        <button id="btnToggleCam" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] px-2.5 py-1 rounded shadow">
-          📷 Start Cam
-        </button>
-
-        <button id="btnFlipCam" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700">
-          🔄 Flip
-        </button>
-
-        <button id="btnCycleLens" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700" title="Switch Rear Camera Lens (Main/Wide)">
-          🔭 Lens
-        </button>
-
-        <button id="btnMirrorCam" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700">
-          🪞
-        </button>
-
-        <button id="btnTorch" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[11px] px-2 py-1 rounded border border-slate-700">
-          🔦 Flash
-        </button>
-
-        <button id="btnOpenLiveModal" class="bg-rose-600/30 hover:bg-rose-600 text-rose-200 border border-rose-500/50 font-extrabold text-[11px] px-2 py-1 rounded">
-          📡 Go Live
-        </button>
-
-        <button id="btnPauseRec" class="hidden bg-amber-600 text-white font-bold text-[11px] px-2 py-1 rounded">
-          ⏸
-        </button>
-
-        <button id="btnRecord" class="bg-red-600 hover:bg-red-500 text-white font-extrabold text-[11px] px-3 py-1 rounded shadow-lg shadow-red-600/30">
-          ⏺ REC
-        </button>
+        <button id="btnAspect" class="bg-purple-600/30 border border-purple-500/40 text-purple-200 font-bold text-[11px] px-2 py-1 rounded">📺 16:9</button>
+        <button id="btnToggleCam" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] px-2.5 py-1 rounded shadow">📷 Start Cam</button>
+        <button id="btnFlipCam" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700">🔄 Flip</button>
+        <button id="btnCycleLens" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700" title="Switch Rear Camera Lens">🔭 Lens</button>
+        <button id="btnMirrorCam" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] px-2 py-1 rounded border border-slate-700">🪞</button>
+        <button id="btnTorch" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[11px] px-2 py-1 rounded border border-slate-700">🔦 Flash</button>
+        <button id="btnOpenLiveModal" class="bg-rose-600/30 hover:bg-rose-600 text-rose-200 border border-rose-500/50 font-extrabold text-[11px] px-2 py-1 rounded">📡 Go Live</button>
+        <button id="btnPauseRec" class="hidden bg-amber-600 text-white font-bold text-[11px] px-2 py-1 rounded">⏸</button>
+        <button id="btnRecord" class="bg-red-600 hover:bg-red-500 text-white font-extrabold text-[11px] px-3 py-1 rounded shadow-lg shadow-red-600/30">⏺ REC</button>
       </div>
     </header>
 
     <!-- PINNED LIVE BROADCAST CANVAS MONITOR -->
     <div id="monitorWrapper" class="relative bg-black w-full flex-1 flex items-center justify-center overflow-hidden max-h-[34dvh] sm:max-h-[42dvh] lg:max-h-full">
       <canvas id="broadcastCanvas" width="1280" height="720" class="w-full h-full object-contain cursor-crosshair"></canvas>
-
-      <!-- Chroma Wall Picker Floating Hint -->
       <div id="chromaPickBanner" class="hidden absolute top-2 left-1/2 -translate-x-1/2 bg-emerald-600 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-lg animate-bounce z-20">
         👆 वीडियो में अपने पीछे की दीवार/पर्दे पर टच करें
       </div>
     </div>
 
-    <!-- QUICK SWITCHER BAR (ALWAYS VISIBLE RIGHT BELOW THE MONITOR) -->
-    <div id="quickSwitcherBar" class="bg-slate-900 border-t border-slate-800 px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1.5 text-[11px]">
+    <!-- QUICK SWITCHER BAR (LOCKED RIGHT UNDER THE MONITOR) -->
+    <div id="quickSwitcherBar" class="bg-slate-900 border-t border-slate-800 px-2 py-1.5 flex flex-wrap items-center justify-between gap-1 text-[11px]">
       <div class="flex flex-wrap items-center gap-1">
-        <button onclick="setLayout('FULL_P1')" id="layout-FULL_P1" class="layout-btn bg-red-600 text-white font-bold px-2 py-1 rounded">P1 Full</button>
-        <button onclick="setLayout('FULL_P2')" id="layout-FULL_P2" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P2 Full</button>
-        <button onclick="setLayout('FULL_P3')" id="layout-FULL_P3" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P3 Full</button>
-        <button onclick="setLayout('FULL_P4')" id="layout-FULL_P4" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P4 Full</button>
+        <button onclick="setLayout('FULL_P1')" id="layout-FULL_P1" class="layout-btn bg-red-600 text-white font-bold px-2 py-1 rounded">P1</button>
+        <button onclick="setLayout('FULL_P2')" id="layout-FULL_P2" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P2</button>
+        <button onclick="setLayout('FULL_P3')" id="layout-FULL_P3" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P3</button>
+        <button onclick="setLayout('FULL_P4')" id="layout-FULL_P4" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">P4</button>
         <button onclick="setLayout('PIP')" id="layout-PIP" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">PiP</button>
-        <button onclick="setLayout('SPLIT')" id="layout-SPLIT" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">2-Way Debate</button>
-        <button onclick="setLayout('TRIPLE')" id="layout-TRIPLE" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">3-Way Debate</button>
-        <button onclick="setLayout('QUAD')" id="layout-QUAD" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">4-Way Grid</button>
+        <button onclick="setLayout('SPLIT')" id="layout-SPLIT" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">2-Way</button>
+        <button onclick="setLayout('TRIPLE')" id="layout-TRIPLE" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">3-Way</button>
+        <button onclick="setLayout('QUAD')" id="layout-QUAD" class="layout-btn bg-slate-800 text-slate-300 font-bold px-2 py-1 rounded">4-Way</button>
       </div>
 
       <div class="flex flex-wrap items-center gap-1">
-        <button id="btnActiveSpeaker" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold px-2 py-1 rounded">
-          🎙️ Speaker: P1
-        </button>
+        <button id="btnActiveSpeaker" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold px-2 py-1 rounded">🎙️ P1</button>
         <button id="btnCountdownIntro" class="bg-sky-600 text-white font-bold px-2 py-1 rounded">🎬 5s</button>
         <button id="btnFlashBreaking" class="bg-amber-600 text-white font-bold px-2 py-1 rounded">🚨 Flash</button>
         <button id="btnOutroSlate" class="bg-slate-800 text-amber-300 border border-amber-500/40 font-bold px-2 py-1 rounded">🏁 End</button>
@@ -160,34 +117,31 @@
       </div>
     </div>
   </div>
+<!-- ======================== END OF MODULE 1 OF 4 ======================== -->
+<!-- ======================= START OF MODULE 2 OF 4 ======================= -->
+  <!-- INDEPENDENTLY SCROLLABLE CONTROL DECK -->
+  <div id="scrollableControlDeck" class="flex-1 w-full lg:w-[42%] lg:h-full overflow-y-auto p-2.5 flex flex-col gap-3 pb-20">
 
-  <!-- =========================================================================
-       PART 2: INDEPENDENTLY SCROLLABLE CONTROL DECK
-       Scrolls smoothly underneath/beside the fixed monitor without moving the screen!
-       ========================================================================= -->
-  <div id="scrollableControlDeck" class="flex-1 w-full lg:w-[42%] lg:h-full overflow-y-auto p-2.5 flex flex-col gap-3 pb-16">
-
-    <!-- QUICK TAB NAVIGATION FOR FAST ACCESS IN REAL WORKSHOP -->
+    <!-- STICKY QUICK-JUMP TABS -->
     <div class="grid grid-cols-4 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 sticky top-0 z-20 backdrop-blur">
-      <a href="#secSubtitles" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg transition">📝 Script/STT</a>
-      <a href="#secDebate" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg transition">🗣️ Debate Panels</a>
-      <a href="#secChromaAudio" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg transition">🟩 Chroma/Audio</a>
-      <a href="#secGraphics" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg transition">📺 Headlines</a>
+      <a href="#secSubtitles" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg">📝 Script/STT</a>
+      <a href="#secDebate" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg">🗣️ Debate (1-4)</a>
+      <a href="#secChromaAudio" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg">🟩 Chroma/Audio</a>
+      <a href="#secGraphics" class="text-center bg-slate-800 hover:bg-red-600 text-white font-bold text-[11px] py-1.5 rounded-lg">📺 Graphics</a>
     </div>
 
-    <!-- ================= SECTION 1: SUBTITLES, LIVE STT & TELEPROMPTER ================= -->
+    <!-- SECTION 1: SUBTITLES, LIVE STT & TELEPROMPTER -->
     <div id="secSubtitles" class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
-      <div class="flex flex-wrap items-center justify-between gap-1.5">
+      <div class="flex flex-wrap items-center justify-between gap-1">
         <div class="flex items-center gap-1.5">
-          <h2 class="text-xs font-extrabold uppercase tracking-wider text-red-400">📝 Subtitles & Live STT</h2>
+          <h2 class="text-xs font-extrabold uppercase text-red-400">📝 Subtitles & Live STT</h2>
           <span id="sttStatusDot" class="hidden w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
         </div>
-
         <div class="flex flex-wrap items-center gap-1">
           <button onclick="loadStorySlot(1)" id="slotBtn1" class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Story 1</button>
           <button onclick="loadStorySlot(2)" id="slotBtn2" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded">Debate 2</button>
           <button onclick="loadStorySlot(3)" id="slotBtn3" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded">Story 3</button>
-          <button id="btnModeScript" class="bg-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded ml-1">📜 Script</button>
+          <button id="btnModeScript" class="bg-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded">📜 Script</button>
           <button id="btnModeSpeech" class="bg-slate-800 text-slate-200 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-700">🎤 Auto STT</button>
           <select id="sttLang" class="bg-slate-800 text-slate-200 text-[11px] font-semibold px-1 py-0.5 rounded border border-slate-700">
             <option value="hi-IN">HI</option>
@@ -196,7 +150,7 @@
         </div>
       </div>
 
-      <!-- Instant Voice Keyboard Dictation Bar (100% Reliable on Every Android Phone) -->
+      <!-- Instant Live Voice / Keyboard Pad -->
       <div class="bg-slate-950 border border-emerald-500/40 rounded-lg p-2 flex items-center gap-2">
         <span class="text-[11px] font-bold text-emerald-400 whitespace-nowrap">🎙️ Live Pad:</span>
         <input id="inpInstantSubtitle" type="text" class="w-full bg-transparent text-xs font-bold text-yellow-300 focus:outline-none" placeholder="यहाँ कीबोर्ड माइक 🎤 से बोलें या टाइप करें—सीधा लाइव सबटाइटल छपेगा..." />
@@ -212,9 +166,7 @@
           <button id="btnNextLine" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded">Next ▶</button>
         </div>
         <div class="flex items-center gap-1">
-          <button id="btnAutoPlayScript" class="bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 text-xs font-bold px-2 py-1 rounded">
-            ▶ Auto (5s)
-          </button>
+          <button id="btnAutoPlayScript" class="bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 text-xs font-bold px-2 py-1 rounded">▶ Auto (5s)</button>
           <button id="btnClearScript" class="bg-slate-800 text-slate-300 text-xs px-2 py-1 rounded">🧹</button>
         </div>
       </div>
@@ -222,173 +174,44 @@
       <div id="scriptLinesList" class="max-h-24 overflow-y-auto flex flex-col gap-1 pr-1"></div>
     </div>
 
-    <!-- ================= SECTION 2: 2-WAY, 3-WAY & 4-WAY DEBATE MASTER CONTROLLER ================= -->
+    <!-- SECTION 2: 2-WAY / 3-WAY / 4-WAY DEBATE & INDIVIDUAL PANEL MATRIX -->
     <div id="secDebate" class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
-        <h2 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400">
-          🗣️ 2-Way / 3-Way / 4-Way Debate & Panel Settings
-        </h2>
-        <!-- PiP Corner Selector -->
-        <div class="flex items-center gap-1 text-[11px]">
-          <span class="text-slate-400">PiP Corner:</span>
+        <h2 class="text-xs font-extrabold uppercase text-cyan-400">🗣️ Debate & 4-Panel Control Matrix</h2>
+        <div class="flex items-center gap-1.5 text-[11px]">
+          <button onclick="swapPanelContents(1, 2)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-bold px-2 py-0.5 rounded">⇄ Swap P1↔P2</button>
+          <button onclick="swapPanelContents(2, 3)" class="bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 font-bold px-2 py-0.5 rounded">⇄ Swap P2↔P3</button>
           <select id="pipCornerSelect" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300 font-bold">
-            <option value="TR">Top-Right</option>
-            <option value="TL">Top-Left</option>
-            <option value="BR">Bottom-Right</option>
-            <option value="BL">Bottom-Left</option>
+            <option value="TR">PiP: Top-Right</option>
+            <option value="TL">PiP: Top-Left</option>
+            <option value="BR">PiP: Bottom-Right</option>
+            <option value="BL">PiP: Bottom-Left</option>
           </select>
         </div>
       </div>
 
-      <!-- DEBATE TOPIC HEADER & LIVE SPEAKER COUNTDOWN TIMER (30s / 60s / 120s) -->
-      <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 flex flex-col gap-2">
-        <div class="flex flex-wrap items-center justify-between gap-2">
+      <!-- Debate Topic Header & Speaker Countdown Timer -->
+      <div class="bg-slate-950 border border-slate-800 rounded-lg p-2 flex flex-col gap-1.5">
+        <div class="flex flex-wrap items-center justify-between gap-1">
           <label class="flex items-center gap-1.5 text-xs font-bold text-amber-300 cursor-pointer">
             <input type="checkbox" id="chkShowDebateBanner" checked class="accent-amber-500" />
-            Show Debate Topic Header & Speaker Timer
+            Show Debate Topic & Speaker Timer
           </label>
           <div class="flex items-center gap-1">
-            <span class="text-[10px] text-slate-400 font-bold">⏱️ Timer:</span>
-            <button onclick="startDebateTimer(30)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">30s</button>
-            <button onclick="startDebateTimer(60)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">60s</button>
-            <button onclick="startDebateTimer(120)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">2m</button>
+            <button onclick="startDebateTimer(30)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">⏱️ 30s</button>
+            <button onclick="startDebateTimer(60)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">⏱️ 60s</button>
+            <button onclick="startDebateTimer(120)" class="bg-slate-800 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">⏱️ 2m</button>
             <button onclick="stopDebateTimer()" class="bg-rose-950 text-rose-300 text-[10px] font-bold px-1.5 py-0.5 rounded">⏹</button>
           </div>
         </div>
-        <input id="inpDebateTopic" type="text" value="महा-बहस: रक्सौल और बिहार के विकास पर सबसे बड़ी चर्चा" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs font-bold text-white" placeholder="Debate Topic Title (ऊपर बीच में दिखेगा)..." />
+        <input id="inpDebateTopic" type="text" value="महा-बहस: रक्सौल और बिहार के विकास पर सबसे बड़ी चर्चा" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Debate Topic Header..." />
       </div>
 
-      <!-- 4 INDEPENDENT PANEL CONTROLLERS (MANUAL NAME, ROLE/PARTY, LOCATION, SOURCE, ZOOM, MUTE) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-
-        <!-- PANEL 1 (ANCHOR) -->
-        <div class="bg-slate-950 border border-red-500/40 rounded-lg p-2.5 flex flex-col gap-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-red-400">🔴 PANEL 1 (Anchor)</span>
-            <div class="flex items-center gap-1">
-              <button onclick="setActiveSpeaker(1)" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded">🎙️ Focus</button>
-              <select id="p1SourceSelect" class="bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-white">
-                <option value="CAM">📷 Live Cam</option>
-                <option value="VIDEO">🎞️ Video</option>
-                <option value="IMAGE">🖼️ Photo</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-1">
-            <input id="inpNameP1" type="text" value="Abhishek Kumar Sah" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Anchor Name" />
-            <input id="inpRoleP1" type="text" value="Chief Editor • Raxaul" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[11px] text-amber-300" placeholder="Role / Designation" />
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-1 pt-1">
-            <div class="flex items-center gap-1">
-              <label class="cursor-pointer bg-slate-800 text-slate-200 text-[10px] font-bold px-2 py-1 rounded">📂 Vid<input type="file" id="p1VideoInput" accept="video/*" class="hidden" /></label>
-              <label class="cursor-pointer bg-slate-800 text-slate-200 text-[10px] font-bold px-2 py-1 rounded">🖼️ Pic<input type="file" id="p1ImageInput" accept="image/*" multiple class="hidden" /></label>
-              <button onclick="togglePanelVideo(1)" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">⏯</button>
-              <button onclick="togglePanelMute(1)" id="p1MuteBtn" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">🔇</button>
-              <button onclick="clearPanelMedia(1)" class="bg-rose-950 text-rose-300 text-[10px] px-1.5 py-1 rounded">🗑</button>
-            </div>
-            <span id="p1Status" class="text-[10px] text-emerald-400 truncate max-w-[90px]">Live Cam</span>
-          </div>
-        </div>
-
-        <!-- PANEL 2 (GUEST 1 / B-ROLL) -->
-        <div class="bg-slate-950 border border-amber-500/40 rounded-lg p-2.5 flex flex-col gap-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-amber-400">🟡 PANEL 2 (Guest 1)</span>
-            <div class="flex items-center gap-1">
-              <button onclick="setActiveSpeaker(2)" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded">🎙️ Focus</button>
-              <select id="p2SourceSelect" class="bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-white">
-                <option value="VIDEO">🎞️ Video</option>
-                <option value="IMAGE">🖼️ Photo</option>
-                <option value="CALL">📞 Live Call</option>
-                <option value="CAM">📷 Live Cam</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-1">
-            <input id="inpNameP2" type="text" value="पैनलिस्ट 1 / रिपोर्टर" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Guest 1 Name" />
-            <input id="inpRoleP2" type="text" value="सत्ता पक्ष / Ground Zero" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[11px] text-amber-300" placeholder="Party / Role / City" />
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-1 pt-1">
-            <div class="flex items-center gap-1">
-              <label class="cursor-pointer bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded">📂 Vid<input type="file" id="p2VideoInput" accept="video/*" class="hidden" /></label>
-              <label class="cursor-pointer bg-teal-600 text-white text-[10px] font-bold px-2 py-1 rounded">🖼️ Pic<input type="file" id="p2ImageInput" accept="image/*" multiple class="hidden" /></label>
-              <button onclick="togglePanelVideo(2)" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">⏯</button>
-              <button onclick="togglePanelMute(2)" id="p2MuteBtn" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">🔇</button>
-              <button onclick="stepPanelPhoto(2, 1)" class="bg-slate-800 text-amber-300 text-[10px] px-1.5 py-1 rounded">▶</button>
-              <button onclick="openGuestCallModal(2)" class="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-1 rounded">📞</button>
-              <button onclick="clearPanelMedia(2)" class="bg-rose-950 text-rose-300 text-[10px] px-1.5 py-1 rounded">🗑</button>
-            </div>
-            <span id="p2Status" class="text-[10px] text-slate-400 truncate max-w-[80px]">Standby</span>
-          </div>
-        </div>
-
-        <!-- PANEL 3 (GUEST 2 / PROOF) -->
-        <div class="bg-slate-950 border border-sky-500/40 rounded-lg p-2.5 flex flex-col gap-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-sky-400">🔵 PANEL 3 (Guest 2)</span>
-            <div class="flex items-center gap-1">
-              <button onclick="setActiveSpeaker(3)" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded">🎙️ Focus</button>
-              <select id="p3SourceSelect" class="bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-white">
-                <option value="IMAGE">🖼️ Photo</option>
-                <option value="VIDEO">🎞️ Video</option>
-                <option value="CALL">📞 Live Call</option>
-                <option value="CAM">📷 Live Cam</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-1">
-            <input id="inpNameP3" type="text" value="पैनलिस्ट 2 / विशेषज्ञ" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Guest 2 Name" />
-            <input id="inpRoleP3" type="text" value="विपक्ष प्रतिनिधि / पटना" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[11px] text-sky-300" placeholder="Party / Role / City" />
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-1 pt-1">
-            <div class="flex items-center gap-1">
-              <label class="cursor-pointer bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded">📂 Vid<input type="file" id="p3VideoInput" accept="video/*" class="hidden" /></label>
-              <label class="cursor-pointer bg-teal-600 text-white text-[10px] font-bold px-2 py-1 rounded">🖼️ Pic<input type="file" id="p3ImageInput" accept="image/*" multiple class="hidden" /></label>
-              <button onclick="togglePanelVideo(3)" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">⏯</button>
-              <button onclick="togglePanelMute(3)" id="p3MuteBtn" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">🔇</button>
-              <button onclick="stepPanelPhoto(3, 1)" class="bg-slate-800 text-amber-300 text-[10px] px-1.5 py-1 rounded">▶</button>
-              <button onclick="openGuestCallModal(3)" class="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-1 rounded">📞</button>
-              <button onclick="clearPanelMedia(3)" class="bg-rose-950 text-rose-300 text-[10px] px-1.5 py-1 rounded">🗑</button>
-            </div>
-            <span id="p3Status" class="text-[10px] text-slate-400 truncate max-w-[80px]">Standby</span>
-          </div>
-        </div>
-
-        <!-- PANEL 4 (GUEST 3 / 4-WAY DEBATE) -->
-        <div class="bg-slate-950 border border-emerald-500/40 rounded-lg p-2.5 flex flex-col gap-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-emerald-400">🟢 PANEL 4 (Guest 3)</span>
-            <div class="flex items-center gap-1">
-              <button onclick="setActiveSpeaker(4)" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded">🎙️ Focus</button>
-              <select id="p4SourceSelect" class="bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-white">
-                <option value="IMAGE">🖼️ Photo</option>
-                <option value="VIDEO">🎞️ Video</option>
-                <option value="CALL">📞 Live Call</option>
-                <option value="CAM">📷 Live Cam</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-1">
-            <input id="inpNameP4" type="text" value="पैनलिस्ट 3 / विश्लेषक" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Guest 3 Name" />
-            <input id="inpRoleP4" type="text" value="राजनीतिक विश्लेषक" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[11px] text-emerald-300" placeholder="Party / Role / City" />
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-1 pt-1">
-            <div class="flex items-center gap-1">
-              <label class="cursor-pointer bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded">📂 Vid<input type="file" id="p4VideoInput" accept="video/*" class="hidden" /></label>
-              <label class="cursor-pointer bg-teal-600 text-white text-[10px] font-bold px-2 py-1 rounded">🖼️ Pic<input type="file" id="p4ImageInput" accept="image/*" multiple class="hidden" /></label>
-              <button onclick="togglePanelVideo(4)" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">⏯</button>
-              <button onclick="togglePanelMute(4)" id="p4MuteBtn" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">🔇</button>
-              <button onclick="stepPanelPhoto(4, 1)" class="bg-slate-800 text-amber-300 text-[10px] px-1.5 py-1 rounded">▶</button>
-              <button onclick="openGuestCallModal(4)" class="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-1 rounded">📞</button>
-              <button onclick="clearPanelMedia(4)" class="bg-rose-950 text-rose-300 text-[10px] px-1.5 py-1 rounded">🗑</button>
-            </div>
-            <span id="p4Status" class="text-[10px] text-slate-400 truncate max-w-[80px]">Standby</span>
-          </div>
-        </div>
-      </div>
+      <!-- 4 INDEPENDENT PANEL CARDS (RENDERED BY JS IN MODULE 3) -->
+      <div id="panelsControlGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
     </div>
 
-    <!-- ================= SECTION 3: CHROMA KEY, ZOOM, AUDIO DSP & OUTPUT ================= -->
+    <!-- SECTION 3: CHROMA KEY, ZOOM, AUDIO DSP & OUTPUT -->
     <div id="secChromaAudio" class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <label class="flex items-center gap-1.5 text-xs font-extrabold text-emerald-400 cursor-pointer">
@@ -408,17 +231,15 @@
         </div>
         <div class="flex items-center justify-end gap-1.5">
           <label class="cursor-pointer bg-slate-800 text-sky-300 border border-slate-700 font-bold px-2 py-1 rounded text-[11px]">
-            🏙️ Studio BG
-            <input type="file" id="studioBgInput" accept="image/*" class="hidden" />
+            🏙️ Studio BG<input type="file" id="studioBgInput" accept="image/*" class="hidden" />
           </label>
           <button id="btnResetStudioBg" class="hidden bg-rose-950 text-rose-300 px-2 py-1 rounded text-[10px]">Reset</button>
         </div>
       </div>
 
-      <!-- Camera Digital Zoom & Brightness -->
       <div class="grid grid-cols-2 gap-2 bg-slate-950 p-2 rounded-lg border border-slate-800 text-xs">
         <div class="flex items-center gap-1.5">
-          <span class="text-slate-400 text-[11px]">🔍 Zoom:</span>
+          <span class="text-slate-400 text-[11px]">🔍 Cam Zoom:</span>
           <input id="zoomSlider" type="range" min="1" max="4" step="0.1" value="1" class="w-full accent-red-500" />
           <span id="zoomVal" class="mono text-[11px] text-amber-400">1.0x</span>
         </div>
@@ -428,36 +249,33 @@
         </div>
       </div>
 
-      <!-- Master Audio Mixer & Recorded Video Output -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 flex flex-col justify-between gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-200">🎙️ Audio Mixer</span>
-            <button id="btnMuteMic" class="text-[11px] font-bold text-emerald-300 bg-emerald-950 border border-emerald-500/40 px-2 py-0.5 rounded">
-              🔊 Mic ON
-            </button>
+            <span class="text-xs font-bold text-slate-200">🎙️ Audio DSP Mixer</span>
+            <button id="btnMuteMic" class="text-[11px] font-bold text-emerald-300 bg-emerald-950 border border-emerald-500/40 px-2 py-0.5 rounded">🔊 Mic ON</button>
           </div>
           <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
             <div id="audioMeterBar" class="h-full bg-gradient-to-r from-emerald-500 via-yellow-400 to-red-500" style="width: 5%;"></div>
           </div>
           <div class="flex items-center justify-between gap-2 text-[11px] text-slate-400">
-            <span>Gain:</span>
+            <span>Boost:</span>
             <input id="micGainSlider" type="range" min="0.5" max="3.5" step="0.1" value="1.6" class="w-24 accent-red-500" />
             <span id="micGainVal" class="mono text-xs text-slate-200">1.6x</span>
           </div>
-          <div class="flex items-center justify-between gap-1">
-            <button id="btnToggleBgm" class="bg-slate-800 text-slate-200 border border-slate-700 px-2 py-1 rounded font-bold text-[10px]">
-              🎵 BGM: OFF
-            </button>
-            <button id="btnBreakerSound" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded font-bold text-[10px]">
-              🔔 Sting
-            </button>
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <button id="btnToggleBgm" class="bg-slate-800 text-slate-200 border border-slate-700 px-2 py-1 rounded font-bold text-[10px]">🎵 BGM: OFF</button>
+            <button id="btnBreakerSound" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded font-bold text-[10px]">🔔 Sting</button>
+            <label class="cursor-pointer bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 px-2 py-1 rounded font-bold text-[10px]">
+              🎵 MP3<input type="file" id="customAudioInput" accept="audio/*" class="hidden" />
+            </label>
+            <button id="btnPlayCustomAudio" class="hidden bg-emerald-700 text-white px-2 py-1 rounded font-bold text-[10px]">▶ Play</button>
           </div>
         </div>
 
         <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 flex flex-col justify-between gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-200">🎬 Recorded Video</span>
+            <span class="text-xs font-bold text-slate-200">🎬 Broadcast Output</span>
             <select id="recBitrateSelect" class="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-emerald-300 font-bold">
               <option value="4000000">HD 4Mbps</option>
               <option value="2500000" selected>Std 2.5Mbps</option>
@@ -466,25 +284,19 @@
           </div>
           <video id="recordedPreviewPlayer" controls playsinline class="hidden w-full max-h-28 bg-black rounded border border-slate-700"></video>
           <div class="flex items-center gap-1.5">
-            <button id="btnSaveVideo" disabled class="flex-1 bg-emerald-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-[11px] py-1.5 px-2 rounded">
-              💾 Save
-            </button>
-            <button id="btnShareVideo" disabled class="flex-1 bg-sky-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-[11px] py-1.5 px-2 rounded">
-              📤 Share
-            </button>
-            <button id="btnClearRecorded" disabled class="bg-rose-950 disabled:opacity-40 text-rose-300 font-bold text-[11px] py-1.5 px-2 rounded">
-              🗑
-            </button>
+            <button id="btnSaveVideo" disabled class="flex-1 bg-emerald-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-[11px] py-1.5 px-2 rounded">💾 Save</button>
+            <button id="btnShareVideo" disabled class="flex-1 bg-sky-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-[11px] py-1.5 px-2 rounded">📤 Share</button>
+            <button id="btnClearRecorded" disabled class="bg-rose-950 disabled:opacity-40 text-rose-300 font-bold text-[11px] py-1.5 px-2 rounded">🗑</button>
           </div>
           <p id="exportStatus" class="text-[10px] text-slate-400 truncate">Ready to record.</p>
         </div>
       </div>
     </div>
 
-    <!-- ================= SECTION 4: HEADLINES, BULLET CARD & BRANDING ================= -->
+    <!-- SECTION 4: HEADLINES, BULLET CARD & STATION BRANDING -->
     <div id="secGraphics" class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">📺 Lower-Thirds, Bullets & Theme</h2>
+        <h2 class="text-xs font-extrabold uppercase text-amber-400">📺 Lower-Thirds, Bullets & Theme</h2>
         <div class="flex items-center gap-1.5">
           <button onclick="setTheme('RED')" class="w-4 h-4 rounded-full bg-red-600 border border-white"></button>
           <button onclick="setTheme('BLUE')" class="w-4 h-4 rounded-full bg-blue-600 border border-slate-500"></button>
@@ -497,29 +309,15 @@
         </div>
       </div>
 
-      <!-- Layer Toggles -->
       <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-2 rounded-lg border border-slate-800 text-[11px]">
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowTopBar" checked class="accent-red-500" /> Contact Bar
-        </label>
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowBug" checked class="accent-red-500" /> Channel Bug
-        </label>
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowSubtitles" checked class="accent-red-500" /> Subtitles
-        </label>
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowLowerThird" checked class="accent-red-500" /> Headline Bar
-        </label>
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowTicker" checked class="accent-red-500" /> Ticker Tape
-        </label>
-        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold">
-          <input type="checkbox" id="chkShowClock" checked class="accent-red-500" /> Clock/Temp
-        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowTopBar" checked class="accent-red-500" /> Contact Bar</label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowBug" checked class="accent-red-500" /> Channel Bug</label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowSubtitles" checked class="accent-red-500" /> Subtitles</label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowLowerThird" checked class="accent-red-500" /> Headline Bar</label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowTicker" checked class="accent-red-500" /> Ticker Tape</label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-200 font-semibold"><input type="checkbox" id="chkShowClock" checked class="accent-red-500" /> Clock/Temp</label>
       </div>
 
-      <!-- Key Highlights Bullet Box -->
       <div class="bg-slate-950 border border-slate-800 rounded-lg p-2 flex flex-col gap-1.5">
         <div class="flex items-center justify-between">
           <label class="flex items-center gap-1.5 text-[11px] font-extrabold text-sky-400 cursor-pointer">
@@ -534,21 +332,18 @@
       </div>
 
       <div class="grid grid-cols-3 gap-1.5">
-        <input id="inpChannel" type="text" value="ABHISHEK DIGITAL NEWS" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Channel" />
-        <input id="inpBadge" type="text" value="BREAKING NEWS" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-red-400" placeholder="Badge" />
-        <input id="inpLocation" type="text" value="Raxaul • 29°C" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-amber-300" placeholder="Location" />
+        <input id="inpChannel" type="text" value="ABHISHEK DIGITAL NEWS" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" />
+        <input id="inpBadge" type="text" value="BREAKING NEWS" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-red-400" />
+        <input id="inpLocation" type="text" value="Raxaul • 29°C" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-amber-300" />
       </div>
 
-      <input id="inpHeadline" type="text" value="रक्सौल से सीधी ग्राउंड रिपोर्ट: क्षेत्र में विकास और सुरक्षा व्यवस्था पर विशेष कवरेज" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-bold text-white" placeholder="Main Headline..." />
-
+      <input id="inpHeadline" type="text" value="रक्सौल से सीधी ग्राउंड रिपोर्ट: क्षेत्र में विकास और सुरक्षा व्यवस्था पर विशेष कवरेज" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-bold text-white" />
       <input id="inpTicker" type="text" value="अभिषेक डिजिटल न्यूज़ में आपका स्वागत है • मौजे वार्ड नं. 13, माई स्थान रोड, रक्सौल, बिहार - 845305 • किसी भी खबर या विज्ञापन के लिए संपर्क करें: Mob 9693539197, WhatsApp 8092912107 •" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-xs text-amber-300" />
-
       <input id="inpContact" type="text" value="Mauje, Ward No. 13, Mai Sthan Road, Raxaul - 845305 | Mob: 9693539197 | WA: 8092912107" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-[11px] text-slate-300" />
     </div>
-
   </div>
 
-  <!-- ================= MODAL 1: LIVE GUEST VIDEO CALL (WEBRTC / VDO.NINJA) ================= -->
+  <!-- MODAL 1: LIVE GUEST VIDEO CALL -->
   <div id="guestCallModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-4 flex flex-col gap-3 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -559,143 +354,225 @@
         <span class="text-[11px] text-amber-300 font-bold">1. गेस्ट को यह लिंक WhatsApp पर भेजें:</span>
         <div class="flex items-center gap-2">
           <input id="guestInviteUrl" type="text" readonly class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs mono text-emerald-300" />
-          <button onclick="shareGuestInviteWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded whitespace-nowrap">
-            📲 WhatsApp
-          </button>
+          <button onclick="shareGuestInviteWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded">📲 WhatsApp</button>
         </div>
       </div>
       <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex flex-col gap-2">
         <span class="text-[11px] text-sky-300 font-bold">2. गेस्ट का वीडियो पैनल में रिसीव करें:</span>
         <div class="flex flex-wrap gap-2">
-          <button onclick="openVdoDirectorRoom()" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs py-2 px-3 rounded">
-            🌐 Open Guest Call Room
-          </button>
-          <button onclick="captureScreenIntoPanel()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 px-3 rounded">
-            🖥️ Capture Call to Panel
-          </button>
+          <button onclick="openVdoDirectorRoom()" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs py-2 px-3 rounded">🌐 Open Call Room</button>
+          <button onclick="captureScreenIntoPanel()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 px-3 rounded">🖥️ Capture Call to Panel</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL 2: WORKING YOUTUBE & FACEBOOK LIVE BROADCAST HUB ================= -->
+  <!-- MODAL 2: YOUTUBE & FACEBOOK LIVE BROADCAST HUB -->
   <div id="liveStreamModal" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-4 flex flex-col gap-3 shadow-2xl max-h-[92dvh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-        <h3 class="font-black text-sm text-rose-400">📡 YouTube & Facebook Live Broadcast Solutions</h3>
+        <h3 class="font-black text-sm text-rose-400">📡 YouTube & Facebook Live Broadcast Hub</h3>
         <button onclick="document.getElementById('liveStreamModal').classList.add('hidden')" class="text-slate-400 hover:text-white font-bold">✖</button>
       </div>
-
-      <!-- METHOD 1: 100% WORKING MOBILE DIRECT LIVE (CLEAN FEED + YOUTUBE/FB SCREEN CAST) -->
       <div class="bg-emerald-950/40 border border-emerald-500/40 rounded-xl p-3 flex flex-col gap-2">
-        <span class="text-xs font-extrabold text-emerald-300">✅ तरीका 1 (100% Working on Mobile without Extra Server): Clean-Feed Live Mode</span>
-        <p class="text-[11px] text-slate-300 leading-relaxed">
-          मोबाइल ब्राउज़र/WebView से सीधे YouTube के `rtmp://` सर्वर पर बिना रीले सर्वर के कनेक्ट नहीं होता। लेकिन आप <b>YouTube App / Facebook App</b> या <b>Streamlabs / Prism Live</b> में "Screen Broadcast" ऑन करके नीचे <b>"📺 Enter Fullscreen Clean Live Feed"</b> दबाएं—स्क्रीन से सारे बटन हट जाएंगे और आपका पूरा स्टूडियो 100% लाइव जाएगा!
+        <span class="text-xs font-extrabold text-emerald-300">✅ तरीका 1 (100% Working on Mobile): Fullscreen Clean-Feed Live Mode</span>
+        <p class="text-[11px] text-slate-300">
+          मोबाइल पर <b>YouTube App / Facebook App</b> या <b>Streamlabs / Prism Live</b> में "Screen Broadcast" ऑन करें और नीचे <b>"📺 Enter Fullscreen Clean Live Feed"</b> दबाएं—सारे कंट्रोल बटन छुप जाएंगे और आपका लाइव टीवी फीड सीधा आपके चैनल पर लाइव जाएगा!
         </p>
         <div class="flex flex-wrap gap-2">
-          <button onclick="toggleCleanFeedMode(true)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs py-2 px-3 rounded-lg shadow">
-            📺 Enter Fullscreen Clean Live Feed
-          </button>
-          <a href="https://studio.youtube.com/channel/UC/livestreaming" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-3 rounded-lg">
-            ▶️ YouTube Studio
-          </a>
+          <button onclick="toggleCleanFeedMode(true)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs py-2 px-3 rounded-lg shadow">📺 Enter Fullscreen Clean Live Feed</button>
+          <a href="https://studio.youtube.com/channel/UC/livestreaming" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-3 rounded-lg">▶️ YouTube Studio</a>
         </div>
       </div>
-
-      <!-- METHOD 2: STREAM KEY + CLOUD WHIP OR LOCAL FFMPEG BRIDGE -->
       <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex flex-col gap-2 text-xs">
-        <span class="font-extrabold text-amber-300">🔑 तरीका 2: Direct Stream Key (WHIP WebRTC / Local FFmpeg RTMP Bridge)</span>
-        <label class="text-slate-400 text-[11px]">Your YouTube / Facebook Stream Key:</label>
-        <input id="inpStreamKey" type="text" placeholder="xxxx-xxxx-xxxx-xxxx-xxxx" class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-white mono text-xs" />
-
-        <label class="text-slate-400 text-[11px]">WebSocket Relay OR WHIP Endpoint URL:</label>
+        <span class="font-extrabold text-amber-300">🔑 तरीका 2: Direct Stream Key (WebSocket-to-RTMP Relay Bridge)</span>
+        <input id="inpStreamKey" type="text" placeholder="Paste YouTube / FB Stream Key (xxxx-xxxx-xxxx)" class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-white mono text-xs" />
         <input id="inpRelayUrl" type="text" value="ws://127.0.0.1:8080/rtmp/" class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-slate-300 mono text-xs" />
-
-        <div class="flex flex-wrap gap-2 pt-1">
-          <button id="btnStartWsStream" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-extrabold py-2 px-3 rounded-lg">
-            🔴 Connect & Stream Key
-          </button>
-          <button id="btnCopyFfmpegCmd" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-bold py-2 px-3 rounded-lg">
-            📋 Copy FFmpeg Bridge Cmd
-          </button>
+        <div class="flex flex-wrap gap-2">
+          <button id="btnStartWsStream" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-extrabold py-2 px-3 rounded-lg">🔴 Connect & Stream Key</button>
+          <button id="btnCopyFfmpegCmd" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-bold py-2 px-3 rounded-lg">📋 Copy FFmpeg Bridge Cmd</button>
         </div>
         <p id="liveStreamStatus" class="text-[11px] text-amber-300 font-semibold"></p>
       </div>
     </div>
   </div>
 
-  <!-- HIDDEN VIDEO & CHROMA BUFFERS -->
+  <!-- HIDDEN MEDIA BUFFERS -->
   <div style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;">
     <video id="vidCam" autoplay playsinline muted></video>
     <video id="vidP1" autoplay playsinline loop muted crossorigin="anonymous"></video>
     <video id="vidP2" autoplay playsinline loop muted crossorigin="anonymous"></video>
     <video id="vidP3" autoplay playsinline loop muted crossorigin="anonymous"></video>
     <video id="vidP4" autoplay playsinline loop muted crossorigin="anonymous"></video>
+    <audio id="audCustom" preload="auto"></audio>
     <canvas id="chromaCanvas" width="640" height="360"></canvas>
   </div>
-
+<!-- ======================== END OF MODULE 2 OF 4 ======================== -->
+<!-- ======================= START OF MODULE 3 OF 4 ======================= -->
   <script>
     // ============================================================================
-    // ABHISHEK DIGITAL NEWS - v7.0 LOCKED-DOCK & 4-PANEL DEBATE ENGINE
+    // ABHISHEK DIGITAL NEWS - v8.0 MODULAR MASTER ENGINE (PART A)
     // ============================================================================
     const canvas = document.getElementById('broadcastCanvas');
     const ctx = canvas.getContext('2d', { alpha: false });
     const chromaCanvas = document.getElementById('chromaCanvas');
     const chromaCtx = chromaCanvas.getContext('2d', { willReadFrequently: true });
-
     const vidCam = document.getElementById('vidCam');
+    const audCustom = document.getElementById('audCustom');
+    const previewPlayer = document.getElementById('recordedPreviewPlayer');
+
     const panelVideos = {
       1: document.getElementById('vidP1'),
       2: document.getElementById('vidP2'),
       3: document.getElementById('vidP3'),
       4: document.getElementById('vidP4')
     };
-    const previewPlayer = document.getElementById('recordedPreviewPlayer');
 
     let isVerticalShorts = false;
-    let cw = 1280;
-    let ch = 720;
+    let cw = 1280, ch = 720;
 
-    // Camera, Multi-Lens & Hardware Torch State
+    // Camera & Torch State
     let streamCam = null;
     let isCamRunning = false;
-    let videoDevices = [];
-    let rearDevices = [];
-    let currentRearIdx = 0;
+    let videoDevices = [], rearDevices = [], currentRearIdx = 0;
     let currentFacingMode = 'user';
     let customMirrorOverride = null;
-    let isTorchOn = false;
-    let isRingLightOn = false;
-    let camZoom = 1.0;
-    let camBrightness = 100;
+    let isTorchOn = false, isRingLightOn = false;
+    let camZoom = 1.0, camBrightness = 100;
 
     // Layout & 4-Panel Debate State
-    let currentLayout = 'FULL_P1'; // FULL_P1, FULL_P2, FULL_P3, FULL_P4, PIP, SPLIT, TRIPLE, QUAD
-    let activeSpeaker = 1; // 1, 2, 3, or 4
-    let debateTimerSec = 0;
-    let debateTimerHandle = null;
+    let currentLayout = 'FULL_P1';
+    let activeSpeaker = 1;
+    let debateTimerSec = 0, debateTimerHandle = null;
 
     const panels = {
-      1: { mode: 'CAM', photos: [], photoIdx: 0, gainNode: null, audioSource: null },
-      2: { mode: 'VIDEO', photos: [], photoIdx: 0, gainNode: null, audioSource: null },
-      3: { mode: 'IMAGE', photos: [], photoIdx: 0, gainNode: null, audioSource: null },
-      4: { mode: 'IMAGE', photos: [], photoIdx: 0, gainNode: null, audioSource: null }
+      1: { mode: 'CAM',   name: 'Abhishek Kumar Sah',   role: 'Chief Editor • Raxaul', zoom: 1.0, photos: [], photoIdx: 0, gainNode: null, audioSource: null },
+      2: { mode: 'VIDEO', name: 'पैनलिस्ट 1 / रिपोर्टर', role: 'सत्ता पक्ष / Ground Zero', zoom: 1.0, photos: [], photoIdx: 0, gainNode: null, audioSource: null },
+      3: { mode: 'IMAGE', name: 'पैनलिस्ट 2 / विशेषज्ञ', role: 'विपक्ष प्रतिनिधि / पटना',  zoom: 1.0, photos: [], photoIdx: 0, gainNode: null, audioSource: null },
+      4: { mode: 'IMAGE', name: 'पैनलिस्ट 3 / विश्लेषक', role: 'राजनीतिक विश्लेषक',       zoom: 1.0, photos: [], photoIdx: 0, gainNode: null, audioSource: null }
     };
 
-    // Chroma Key & Custom Branding
+    function buildPanelsControlUI() {
+      const container = document.getElementById('panelsControlGrid');
+      const colors = { 1: 'red', 2: 'amber', 3: 'sky', 4: 'emerald' };
+      const labels = { 1: '🔴 P1 (Anchor)', 2: '🟡 P2 (Guest 1)', 3: '🔵 P3 (Guest 2)', 4: '🟢 P4 (Guest 3)' };
+      container.innerHTML = '';
+
+      [1, 2, 3, 4].forEach(n => {
+        const c = colors[n];
+        const card = document.createElement('div');
+        card.className = `bg-slate-950 border border-${c}-500/40 rounded-lg p-2 flex flex-col gap-1.5`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-${c}-400">${labels[n]}</span>
+            <div class="flex items-center gap-1">
+              <button onclick="setActiveSpeaker(${n})" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded">🎙️ Focus</button>
+              <button onclick="setLayout('FULL_P${n}')" class="bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">Solo</button>
+              <select id="p${n}SourceSelect" class="bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-white">
+                <option value="CAM" ${panels[n].mode==='CAM'?'selected':''}>📷 Cam</option>
+                <option value="VIDEO" ${panels[n].mode==='VIDEO'?'selected':''}>🎞️ Video</option>
+                <option value="IMAGE" ${panels[n].mode==='IMAGE'?'selected':''}>🖼️ Photo</option>
+                <option value="CALL">📞 Call</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-1">
+            <input id="inpNameP${n}" type="text" value="${panels[n].name}" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-bold text-white" placeholder="Name" />
+            <input id="inpRoleP${n}" type="text" value="${panels[n].role}" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[11px] text-${c}-300" placeholder="Role / Party / City" />
+          </div>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400">
+            <span>Zoom:</span>
+            <input type="range" min="1" max="3" step="0.1" value="1" oninput="panels[${n}].zoom=parseFloat(this.value)" class="w-full accent-${c}-500" />
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-1 pt-0.5">
+            <div class="flex items-center gap-1">
+              <label class="cursor-pointer bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded">📂 Vid<input type="file" id="p${n}VideoInput" accept="video/*" class="hidden" /></label>
+              <label class="cursor-pointer bg-teal-600 text-white text-[10px] font-bold px-2 py-1 rounded">🖼️ Pic<input type="file" id="p${n}ImageInput" accept="image/*" multiple class="hidden" /></label>
+              <button onclick="togglePanelVideo(${n})" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">⏯</button>
+              <button onclick="togglePanelMute(${n})" id="p${n}MuteBtn" class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded">🔇</button>
+              <button onclick="stepPanelPhoto(${n}, 1)" class="bg-slate-800 text-amber-300 text-[10px] px-1.5 py-1 rounded">▶</button>
+              <button onclick="openGuestCallModal(${n})" class="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-1 rounded">📞</button>
+              <button onclick="clearPanelMedia(${n})" class="bg-rose-950 text-rose-300 text-[10px] px-1.5 py-1 rounded">🗑</button>
+            </div>
+            <span id="p${n}Status" class="text-[10px] text-slate-400 truncate max-w-[75px]">${panels[n].mode}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      [1, 2, 3, 4].forEach(pNum => {
+        const selectEl = document.getElementById(`p${pNum}SourceSelect`);
+        selectEl.addEventListener('change', (e) => {
+          panels[pNum].mode = e.target.value;
+          document.getElementById(`p${pNum}Status`).textContent = e.target.value;
+          if (e.target.value === 'CALL') openGuestCallModal(pNum);
+        });
+
+        document.getElementById(`p${pNum}VideoInput`).addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          await ensureMasterAudioEngine();
+          const vEl = panelVideos[pNum];
+          vEl.srcObject = null;
+          vEl.src = URL.createObjectURL(file);
+          vEl.muted = false;
+          await vEl.play();
+          panels[pNum].mode = 'VIDEO';
+          selectEl.value = 'VIDEO';
+          document.getElementById(`p${pNum}Status`).textContent = `🎞️ ${file.name}`;
+          if (pNum === 2 && currentLayout === 'FULL_P1') setLayout('SPLIT');
+          if (pNum === 3 && currentLayout === 'SPLIT') setLayout('TRIPLE');
+          if (pNum === 4) setLayout('QUAD');
+          e.target.value = '';
+        });
+
+        document.getElementById(`p${pNum}ImageInput`).addEventListener('change', (e) => {
+          const files = Array.from(e.target.files || []);
+          if (!files.length) return;
+          panels[pNum].photos = [];
+          panels[pNum].photoIdx = 0;
+          files.forEach(f => {
+            const img = new Image();
+            img.src = URL.createObjectURL(f);
+            panels[pNum].photos.push(img);
+          });
+          panels[pNum].mode = 'IMAGE';
+          selectEl.value = 'IMAGE';
+          document.getElementById(`p${pNum}Status`).textContent = `🖼️ 1/${files.length}`;
+          if (pNum === 2 && currentLayout === 'FULL_P1') setLayout('SPLIT');
+          if (pNum === 3 && currentLayout === 'SPLIT') setLayout('TRIPLE');
+          if (pNum === 4) setLayout('QUAD');
+          e.target.value = '';
+        });
+      });
+    }
+
+    function swapPanelContents(a, b) {
+      const tempMode = panels[a].mode, tempPhotos = panels[a].photos, tempIdx = panels[a].photoIdx;
+      const tempName = document.getElementById(`inpNameP${a}`).value;
+      const tempRole = document.getElementById(`inpRoleP${a}`).value;
+
+      panels[a].mode = panels[b].mode;
+      panels[a].photos = panels[b].photos;
+      panels[a].photoIdx = panels[b].photoIdx;
+      document.getElementById(`inpNameP${a}`).value = document.getElementById(`inpNameP${b}`).value;
+      document.getElementById(`inpRoleP${a}`).value = document.getElementById(`inpRoleP${b}`).value;
+      document.getElementById(`p${a}SourceSelect`).value = panels[a].mode;
+
+      panels[b].mode = tempMode;
+      panels[b].photos = tempPhotos;
+      panels[b].photoIdx = tempIdx;
+      document.getElementById(`inpNameP${b}`).value = tempName;
+      document.getElementById(`inpRoleP${b}`).value = tempRole;
+      document.getElementById(`p${b}SourceSelect`).value = panels[b].mode;
+    }
+
+    // Chroma Key & Branding State
     let keyColor = { r: 30, g: 180, b: 60 };
     let isPickingChromaColor = false;
-    let customStudioBgImg = null;
-    let customLogoImg = null;
-
-    // Special Overlays & Telestrator Pen
-    let breakingFlashUntil = 0;
-    let countdownSecLeft = 0;
-    let countdownTimer = null;
-    let showOutroSlate = false;
-    let isPenEnabled = false;
-    let isDrawingNow = false;
-    let penStrokes = [];
+    let customStudioBgImg = null, customLogoImg = null;
+    let breakingFlashUntil = 0, countdownSecLeft = 0, countdownTimer = null, showOutroSlate = false;
+    let isPenEnabled = false, isDrawingNow = false, penStrokes = [];
 
     const THEMES = {
       RED:     { primary: '#dc2626', dark: '#7f1d1d', accent: '#facc15', badge: '#b91c1c' },
@@ -705,36 +582,15 @@
     };
     let activeTheme = THEMES.RED;
 
-    // Audio DSP Engine
-    let audioCtx = null;
-    let destNode = null;
-    let analyserNode = null;
-    let micStream = null;
-    let micGainNode = null;
-    let isMicMuted = false;
-    let bgmInterval = null;
-    let isBgmActive = false;
+    let audioCtx = null, destNode = null, analyserNode = null, micStream = null, micGainNode = null;
+    let customAudioSource = null;
+    let isMicMuted = false, bgmInterval = null, isBgmActive = false;
 
-    // Recording & Streaming
-    let mediaRecorder = null;
-    let recordedChunks = [];
-    let lastRecordedBlob = null;
-    let lastRecordedExt = 'mp4';
-    let isRecording = false;
-    let isRecPaused = false;
-    let recSeconds = 0;
-    let recInterval = null;
-    let wsStreamSocket = null;
+    let mediaRecorder = null, recordedChunks = [], lastRecordedBlob = null, lastRecordedExt = 'mp4';
+    let isRecording = false, isRecPaused = false, recSeconds = 0, recInterval = null, wsStreamSocket = null;
 
-    // Subtitles & Speech
-    let activeStorySlot = 1;
-    let scriptLines = [];
-    let currentLineIdx = 0;
-    let autoPlayTimer = null;
-    let subtitleMode = 'SCRIPT';
-    let liveSpokenSubtitle = '';
-    let recognition = null;
-    let tickerX = 1280;
+    let activeStorySlot = 1, scriptLines = [], currentLineIdx = 0, autoPlayTimer = null;
+    let subtitleMode = 'SCRIPT', liveSpokenSubtitle = '', recognition = null, tickerX = 1280;
 
     const DEFAULT_STORIES = {
       1: {
@@ -754,9 +610,6 @@
       }
     };
 
-    // ----------------------------------------------------------------------------
-    // 1. MASTER AUDIO ENGINE (MIXES MIC + ALL 4 PANELS + BGM)
-    // ----------------------------------------------------------------------------
     async function ensureMasterAudioEngine() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
@@ -770,7 +623,6 @@
         silentOsc.connect(silentGain);
         silentGain.connect(destNode);
         silentOsc.start();
-
         updateAudioMeterLoop();
       }
       if (audioCtx.state === 'suspended') await audioCtx.resume();
@@ -815,6 +667,15 @@
           } catch (e) {}
         }
       });
+
+      if (!customAudioSource) {
+        try {
+          customAudioSource = audioCtx.createMediaElementSource(audCustom);
+          customAudioSource.connect(analyserNode);
+          customAudioSource.connect(destNode);
+          customAudioSource.connect(audioCtx.destination);
+        } catch (e) {}
+      }
     }
 
     function updateAudioMeterLoop() {
@@ -831,9 +692,25 @@
       tick();
     }
 
-    // ----------------------------------------------------------------------------
-    // 2. MULTI-LENS CAMERA + GUARANTEED REAR TORCH & FRONT RING-LIGHT ENGINE
-    // ----------------------------------------------------------------------------
+    document.getElementById('customAudioInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      await ensureMasterAudioEngine();
+      audCustom.src = URL.createObjectURL(file);
+      document.getElementById('btnPlayCustomAudio').classList.remove('hidden');
+    });
+    document.getElementById('btnPlayCustomAudio').addEventListener('click', async (e) => {
+      await ensureMasterAudioEngine();
+      if (audCustom.paused) {
+        audCustom.play();
+        e.target.textContent = '⏹ Stop';
+      } else {
+        audCustom.pause();
+        audCustom.currentTime = 0;
+        e.target.textContent = '▶ Play';
+      }
+    });
+
     async function refreshCameraDeviceList() {
       try {
         const all = await navigator.mediaDevices.enumerateDevices();
@@ -848,9 +725,7 @@
     async function startCameraStream(facing = 'user', specificDeviceId = null) {
       try {
         await ensureMasterAudioEngine();
-        if (streamCam) {
-          streamCam.getTracks().forEach(t => t.stop());
-        }
+        if (streamCam) streamCam.getTracks().forEach(t => t.stop());
 
         const videoConstraint = specificDeviceId
           ? { deviceId: { exact: specificDeviceId }, width: { ideal: 1280 }, height: { ideal: 720 } }
@@ -899,14 +774,11 @@
       else startCameraStream(currentFacingMode);
     });
 
-    // Flip Front <-> Main Rear Camera
     document.getElementById('btnFlipCam').addEventListener('click', async () => {
       customMirrorOverride = null;
       const nextFacing = currentFacingMode === 'user' ? 'environment' : 'user';
       await refreshCameraDeviceList();
-
       if (nextFacing === 'environment' && rearDevices.length > 0) {
-        // Pick primary rear lens (usually index 0 of rearDevices) which has the physical LED flash
         currentRearIdx = 0;
         await startCameraStream('environment', rearDevices[0].deviceId);
         return;
@@ -914,7 +786,6 @@
       await startCameraStream(nextFacing);
     });
 
-    // Cycle through all available lenses (Fixes phones where lens 2 has no torch but lens 0 does!)
     document.getElementById('btnCycleLens').addEventListener('click', async () => {
       await refreshCameraDeviceList();
       if (videoDevices.length <= 1) return alert('इस डिवाइस में 1 ही मुख्य कैमरा उपलब्ध है।');
@@ -924,30 +795,19 @@
       await startCameraStream(isFront ? 'user' : 'environment', dev.deviceId);
     });
 
-    // FIXED REAR HARDWARE TORCH + NATIVE BRIDGE + FRONT RING LIGHT
     document.getElementById('btnTorch').addEventListener('click', async () => {
       const btn = document.getElementById('btnTorch');
-
-      // Case 1: Front Camera is active -> Toggle Studio Screen Ring Light
       if (currentFacingMode === 'user') {
         isRingLightOn = !isRingLightOn;
         document.getElementById('studioBody').classList.toggle('ring-light-active', isRingLightOn);
         btn.textContent = isRingLightOn ? '💡 Ring ON' : '🔦 Flash';
-        btn.className = isRingLightOn
-          ? 'bg-amber-400 text-slate-950 font-extrabold text-[11px] px-2 py-1 rounded shadow'
-          : 'bg-slate-800 text-amber-300 font-bold text-[11px] px-2 py-1 rounded border border-slate-700';
         return;
       }
 
-      // Case 2: Rear Camera is active -> Try MediaStream Track Torch + ImageCapture + Native Bridge
-      if (!isCamRunning) {
-        await startCameraStream('environment');
-      }
-
+      if (!isCamRunning) await startCameraStream('environment');
       isTorchOn = !isTorchOn;
       let torchApplied = false;
 
-      // Method A: Standard & ImageCapture MediaStreamTrack constraints (with 150ms hardware settle)
       if (streamCam) {
         const track = streamCam.getVideoTracks()[0];
         if (track) {
@@ -963,7 +823,6 @@
         }
       }
 
-      // Method B: If current rear lens doesn't have flash (e.g. wide-angle lens), auto-switch to Rear Lens 0 and enable torch!
       if (!torchApplied && rearDevices.length > 1) {
         for (let i = 0; i < rearDevices.length; i++) {
           try {
@@ -977,36 +836,29 @@
         }
       }
 
-      // Method C: Native Android CameraManager Bridge (when camera is stopped or supported)
       if (!torchApplied && window.AndroidNativeTorch) {
-        try {
-          torchApplied = window.AndroidNativeTorch.setTorch(isTorchOn);
-        } catch (e) {}
+        try { torchApplied = window.AndroidNativeTorch.setTorch(isTorchOn); } catch (e) {}
       }
 
-      // Method D: Ultimate Screen Illumination Fallback if device hardware blocks WebRTC Torch
       if (!torchApplied) {
         isRingLightOn = isTorchOn;
         document.getElementById('studioBody').classList.toggle('ring-light-active', isRingLightOn);
       }
-
       btn.textContent = isTorchOn ? '🔦 ON' : '🔦 Flash';
-      btn.className = isTorchOn
-        ? 'bg-amber-400 text-slate-950 font-extrabold text-[11px] px-2 py-1 rounded shadow'
-        : 'bg-slate-800 text-amber-300 font-bold text-[11px] px-2 py-1 rounded border border-slate-700';
     });
 
     document.getElementById('btnMirrorCam').addEventListener('click', () => {
       const cur = customMirrorOverride !== null ? customMirrorOverride : (currentFacingMode === 'user');
       customMirrorOverride = !cur;
     });
-
-    // ----------------------------------------------------------------------------
-    // 3. 4-PANEL DEBATE MATRIX & DEBATE COUNTDOWN TIMER
-    // ----------------------------------------------------------------------------
+<!-- ======================== END OF MODULE 3 OF 4 ======================== -->
+<!-- ======================= START OF MODULE 4 OF 4 ======================= -->
+    // ============================================================================
+    // ABHISHEK DIGITAL NEWS - v8.0 MODULAR MASTER ENGINE (PART B)
+    // ============================================================================
     function setActiveSpeaker(pNum) {
       activeSpeaker = pNum;
-      document.getElementById('btnActiveSpeaker').textContent = `🎙️ Speaker: P${pNum}`;
+      document.getElementById('btnActiveSpeaker').textContent = `🎙️ P${pNum}`;
     }
 
     document.getElementById('btnActiveSpeaker').addEventListener('click', () => {
@@ -1023,7 +875,7 @@
           debateTimerSec = 0;
           clearInterval(debateTimerHandle);
           debateTimerHandle = null;
-          playCountdownBeep(880, 0.5); // Time-up buzzer!
+          playCountdownBeep(880, 0.5);
         }
       }, 1000);
     }
@@ -1033,52 +885,6 @@
       debateTimerHandle = null;
       debateTimerSec = 0;
     }
-
-    [1, 2, 3, 4].forEach(pNum => {
-      const selectEl = document.getElementById(`p${pNum}SourceSelect`);
-      selectEl.addEventListener('change', (e) => {
-        panels[pNum].mode = e.target.value;
-        document.getElementById(`p${pNum}Status`).textContent = e.target.value;
-        if (e.target.value === 'CALL') openGuestCallModal(pNum);
-      });
-
-      document.getElementById(`p${pNum}VideoInput`).addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        await ensureMasterAudioEngine();
-        const vEl = panelVideos[pNum];
-        vEl.srcObject = null;
-        vEl.src = URL.createObjectURL(file);
-        vEl.muted = false;
-        await vEl.play();
-        panels[pNum].mode = 'VIDEO';
-        selectEl.value = 'VIDEO';
-        document.getElementById(`p${pNum}Status`).textContent = `🎞️ ${file.name}`;
-        if (pNum === 2 && currentLayout === 'FULL_P1') setLayout('SPLIT');
-        if (pNum === 3 && currentLayout === 'SPLIT') setLayout('TRIPLE');
-        if (pNum === 4) setLayout('QUAD');
-        e.target.value = '';
-      });
-
-      document.getElementById(`p${pNum}ImageInput`).addEventListener('change', (e) => {
-        const files = Array.from(e.target.files || []);
-        if (!files.length) return;
-        panels[pNum].photos = [];
-        panels[pNum].photoIdx = 0;
-        files.forEach(f => {
-          const img = new Image();
-          img.src = URL.createObjectURL(f);
-          panels[pNum].photos.push(img);
-        });
-        panels[pNum].mode = 'IMAGE';
-        selectEl.value = 'IMAGE';
-        document.getElementById(`p${pNum}Status`).textContent = `🖼️ 1/${files.length}`;
-        if (pNum === 2 && currentLayout === 'FULL_P1') setLayout('SPLIT');
-        if (pNum === 3 && currentLayout === 'SPLIT') setLayout('TRIPLE');
-        if (pNum === 4) setLayout('QUAD');
-        e.target.value = '';
-      });
-    });
 
     function togglePanelVideo(pNum) {
       const vEl = panelVideos[pNum];
@@ -1095,9 +901,7 @@
       const isMuted = g.gain.value === 0;
       g.gain.value = isMuted ? 0.9 : 0;
       btn.textContent = isMuted ? '🔊' : '🔇';
-      btn.className = isMuted
-        ? 'bg-emerald-700 text-white text-[10px] px-1.5 py-1 rounded'
-        : 'bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded';
+      btn.className = isMuted ? 'bg-emerald-700 text-white text-[10px] px-1.5 py-1 rounded' : 'bg-slate-800 text-slate-200 text-[10px] px-1.5 py-1 rounded';
     }
 
     function stepPanelPhoto(pNum, dir) {
@@ -1121,9 +925,6 @@
       document.getElementById(`p${pNum}Status`).textContent = 'Cleared';
     }
 
-    // ----------------------------------------------------------------------------
-    // 4. LIVE GUEST CALL & WORKING YOUTUBE / FB CLEAN-FEED STREAMING
-    // ----------------------------------------------------------------------------
     let activeCallTargetPanel = 2;
     const roomHash = 'ADN_Raxaul_' + Math.floor(1000 + Math.random() * 9000);
 
@@ -1140,7 +941,7 @@
 
     function shareGuestInviteWhatsApp() {
       const url = document.getElementById('guestInviteUrl').value;
-      const msg = encodeURIComponent(`🔴 *Abhishek Digital News Live Debate*\nलाइव डिबेट में जुड़ने के लिए इस लिंक पर क्लिक करें और कैमरा ऑन करें:\n${url}`);
+      const msg = encodeURIComponent(`🔴 *Abhishek Digital News Live Debate*\nलाइव डिबेट में जुड़ने के लिए इस लिंक पर क्लिक करें:\n${url}`);
       window.open(`https://wa.me/?text=${msg}`, '_blank');
     }
 
@@ -1150,10 +951,7 @@
 
     async function captureScreenIntoPanel() {
       try {
-        if (!navigator.mediaDevices.getDisplayMedia) {
-          alert('मोबाइल पर VDO.Ninja रूम खोलें या वीडियो स्ट्रीम चुनें।');
-          return;
-        }
+        if (!navigator.mediaDevices.getDisplayMedia) return alert('मोबाइल पर VDO.Ninja रूम खोलें या वीडियो चुनें।');
         const dispStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
         const vEl = panelVideos[activeCallTargetPanel];
         vEl.srcObject = dispStream;
@@ -1164,7 +962,6 @@
       } catch (e) {}
     }
 
-    // Clean-Feed Fullscreen Mode for 100% Working Mobile Screen-Cast Live Streaming
     function toggleCleanFeedMode(enable) {
       document.getElementById('liveStreamModal').classList.add('hidden');
       document.body.classList.toggle('clean-feed-mode', enable);
@@ -1178,14 +975,11 @@
 
     document.getElementById('btnCopyFfmpegCmd').addEventListener('click', () => {
       const key = document.getElementById('inpStreamKey').value.trim() || 'YOUR_STREAM_KEY';
-      const cmd = `npx rtsp-simple-server & ffmpeg -i ws://127.0.0.1:8080/rtmp/${key} -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -f flv rtmp://a.rtmp.youtube.com/live2/${key}`;
+      const cmd = `ffmpeg -i ws://127.0.0.1:8080/rtmp/${key} -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -f flv rtmp://a.rtmp.youtube.com/live2/${key}`;
       navigator.clipboard.writeText(cmd);
       document.getElementById('liveStreamStatus').textContent = '✅ FFmpeg RTMP Bridge Command Copied!';
     });
 
-    // ----------------------------------------------------------------------------
-    // 5. CHROMA KEY ENGINE + TELESTRATOR PEN
-    // ----------------------------------------------------------------------------
     document.getElementById('btnPickChromaColor').addEventListener('click', () => {
       if (!isCamRunning) return alert('पहले "📷 Start Cam" दबाएं, फिर पीछे की दीवार पर टच करें।');
       isPickingChromaColor = true;
@@ -1229,15 +1023,13 @@
     });
     window.addEventListener('pointerup', () => { isDrawingNow = false; });
 
-    function drawCameraWithFixedChroma(x, y, w, h) {
+    function drawCameraWithFixedChroma(x, y, w, h, pZoom = 1.0) {
       const useChroma = document.getElementById('chkChromaKey').checked;
-      if (useChroma) {
-        drawVirtual3DNewsroom(x, y, w, h);
-      }
+      if (useChroma) drawVirtual3DNewsroom(x, y, w, h);
 
       const vw = vidCam.videoWidth || 1280;
       const vh = vidCam.videoHeight || 720;
-      const scale = Math.max(w / vw, h / vh) * camZoom;
+      const scale = Math.max(w / vw, h / vh) * camZoom * pZoom;
       const dw = vw * scale;
       const dh = vh * scale;
       const offsetX = (w - dw) / 2;
@@ -1255,21 +1047,15 @@
         const tolSq = tol * tol * 3;
 
         for (let i = 0; i < data.length; i += 4) {
-          const dr = data[i] - kr;
-          const dg = data[i + 1] - kg;
-          const db = data[i + 2] - kb;
-          if ((dr * dr + dg * dg + db * db) < tolSq) {
-            data[i + 3] = 0;
-          }
+          const dr = data[i] - kr, dg = data[i + 1] - kg, db = data[i + 2] - kb;
+          if ((dr * dr + dg * dg + db * db) < tolSq) data[i + 3] = 0;
         }
         chromaCtx.putImageData(frame, 0, 0);
         sourceElement = chromaCanvas;
       }
 
       ctx.save();
-      if (camBrightness !== 100 && !useChroma) {
-        ctx.filter = `brightness(${camBrightness}%) contrast(105%)`;
-      }
+      if (camBrightness !== 100 && !useChroma) ctx.filter = `brightness(${camBrightness}%) contrast(105%)`;
       if (isMirror) {
         ctx.translate(x + w, y);
         ctx.scale(-1, 1);
@@ -1281,9 +1067,6 @@
       ctx.restore();
     }
 
-    // ----------------------------------------------------------------------------
-    // 6. SUBTITLES & SPEECH-TO-TEXT
-    // ----------------------------------------------------------------------------
     document.getElementById('inpInstantSubtitle').addEventListener('input', (e) => {
       liveSpokenSubtitle = e.target.value.trim();
       if (liveSpokenSubtitle && subtitleMode !== 'SPEECH') {
@@ -1303,13 +1086,10 @@
       recognition.lang = document.getElementById('sttLang').value;
       recognition.continuous = true;
       recognition.interimResults = true;
-
       recognition.onstart = () => document.getElementById('sttStatusDot').classList.remove('hidden');
       recognition.onresult = (event) => {
         let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
+        for (let i = event.resultIndex; i < event.results.length; i++) transcript += event.results[i][0].transcript;
         liveSpokenSubtitle = transcript.trim();
         document.getElementById('inpInstantSubtitle').value = liveSpokenSubtitle;
       };
@@ -1326,8 +1106,8 @@
 
     function updateSubtitleModeButtons() {
       document.getElementById('btnModeScript').className = subtitleMode === 'SCRIPT'
-        ? 'bg-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded ml-1'
-        : 'bg-slate-800 text-slate-300 text-[11px] font-bold px-2 py-0.5 rounded ml-1';
+        ? 'bg-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded'
+        : 'bg-slate-800 text-slate-300 text-[11px] font-bold px-2 py-0.5 rounded';
       document.getElementById('btnModeSpeech').className = subtitleMode === 'SPEECH'
         ? 'bg-emerald-600 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow'
         : 'bg-slate-800 text-slate-200 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-700';
@@ -1339,16 +1119,12 @@
       document.getElementById('sttStatusDot').classList.add('hidden');
       if (recognition) { try { recognition.stop(); } catch (e) {} }
     });
-
     document.getElementById('btnModeSpeech').addEventListener('click', () => {
       subtitleMode = 'SPEECH';
       updateSubtitleModeButtons();
       startSpeechRecognitionEngine();
     });
 
-    // ----------------------------------------------------------------------------
-    // 7. DRAW PANEL BOXES WITH DUAL NAME + ROLE/PARTY TAGS
-    // ----------------------------------------------------------------------------
     function drawVirtual3DNewsroom(x, y, w, h) {
       if (customStudioBgImg) {
         ctx.drawImage(customStudioBgImg, x, y, w, h);
@@ -1374,8 +1150,7 @@
         ctx.lineTo(gx + offset, y + h);
         ctx.stroke();
       }
-      const cx = x + w / 2, cy = y + h * 0.42;
-      const t = Date.now() / 1100;
+      const cx = x + w / 2, cy = y + h * 0.42, t = Date.now() / 1100;
       ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
       ctx.lineWidth = 2;
       for (let r = 45; r <= 125; r += 40) {
@@ -1394,102 +1169,88 @@
 
       const pState = panels[pNum];
       const vEl = panelVideos[pNum];
-      const nameStr = document.getElementById(`inpNameP${pNum}`).value || `Panel ${pNum}`;
-      const roleStr = document.getElementById(`inpRoleP${pNum}`).value || '';
+      const nameEl = document.getElementById(`inpNameP${pNum}`);
+      const roleEl = document.getElementById(`inpRoleP${pNum}`);
+      const nameStr = nameEl ? nameEl.value : pState.name;
+      const roleStr = roleEl ? roleEl.value : pState.role;
+      const pZoom = pState.zoom || 1.0;
 
       if (pState.mode === 'CAM') {
         if (isCamRunning && vidCam.readyState >= 2) {
-          drawCameraWithFixedChroma(x, y, w, h);
+          drawCameraWithFixedChroma(x, y, w, h, pZoom);
         } else {
           drawVirtual3DNewsroom(x, y, w, h);
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 16px Inter, sans-serif';
+          ctx.font = 'bold 15px Inter, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(`PANEL ${pNum}: TAP "START CAM"`, x + w / 2, y + h / 2);
         }
       } else if (pState.mode === 'VIDEO' || pState.mode === 'CALL') {
         if (vEl && vEl.readyState >= 2 && (vEl.src || vEl.srcObject)) {
-          const vw = vEl.videoWidth || 1280;
-          const vh = vEl.videoHeight || 720;
-          const scale = Math.max(w / vw, h / vh);
+          const vw = vEl.videoWidth || 1280, vh = vEl.videoHeight || 720;
+          const scale = Math.max(w / vw, h / vh) * pZoom;
           ctx.drawImage(vEl, x + (w - vw * scale) / 2, y + (h - vh * scale) / 2, vw * scale, vh * scale);
         } else {
           drawVirtual3DNewsroom(x, y, w, h);
           ctx.fillStyle = '#38bdf8';
-          ctx.font = 'bold 15px Inter, sans-serif';
+          ctx.font = 'bold 14px Inter, sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText(`PANEL ${pNum}: LOAD VIDEO OR CALL`, x + w / 2, y + h / 2);
+          ctx.fillText(`PANEL ${pNum}: LOAD VIDEO / CALL`, x + w / 2, y + h / 2);
         }
       } else if (pState.mode === 'IMAGE') {
         const img = pState.photos[pState.photoIdx];
         if (img) {
-          const iw = img.width || 800;
-          const ih = img.height || 600;
-          const scale = Math.max(w / iw, h / ih);
+          const iw = img.width || 800, ih = img.height || 600;
+          const scale = Math.max(w / iw, h / ih) * pZoom;
           ctx.drawImage(img, x + (w - iw * scale) / 2, y + (h - ih * scale) / 2, iw * scale, ih * scale);
         } else {
           drawVirtual3DNewsroom(x, y, w, h);
           ctx.fillStyle = '#facc15';
-          ctx.font = 'bold 15px Inter, sans-serif';
+          ctx.font = 'bold 14px Inter, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(`PANEL ${pNum}: LOAD PHOTO`, x + w / 2, y + h / 2);
         }
       }
 
-      // Draw Professional TV Two-Line Name + Party/Role Plate
       if (showNamePlate && nameStr) {
-        const plateW = Math.min(w - 20, 270);
-        const plateH = roleStr ? 46 : 30;
-        const plateX = x + 10;
-        const plateY = y + h - plateH - 10;
-
+        const plateW = Math.min(w - 16, 265);
+        const plateH = roleStr ? 44 : 28;
+        const plateX = x + 8, plateY = y + h - plateH - 8;
         ctx.fillStyle = 'rgba(6, 10, 20, 0.92)';
         ctx.fillRect(plateX, plateY, plateW, plateH);
         ctx.fillStyle = activeSpeaker === pNum ? '#facc15' : activeTheme.primary;
         ctx.fillRect(plateX, plateY, 6, plateH);
-
         ctx.fillStyle = '#ffffff';
-        ctx.font = '800 15px Noto Sans Devanagari, Inter, sans-serif';
+        ctx.font = '800 14px Noto Sans Devanagari, Inter, sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText(nameStr, plateX + 14, plateY + 19, plateW - 22);
-
+        ctx.fillText(nameStr, plateX + 12, plateY + 18, plateW - 18);
         if (roleStr) {
           ctx.fillStyle = activeSpeaker === pNum ? '#fef08a' : '#38bdf8';
-          ctx.font = '700 12px Noto Sans Devanagari, Inter, sans-serif';
-          ctx.fillText(roleStr, plateX + 14, plateY + 38, plateW - 22);
+          ctx.font = '700 11px Noto Sans Devanagari, Inter, sans-serif';
+          ctx.fillText(roleStr, plateX + 12, plateY + 36, plateW - 18);
         }
       }
       ctx.restore();
     }
 
-    // ----------------------------------------------------------------------------
-    // 8. MASTER 60FPS COMPOSITOR LOOP (SUPPORTS 2-WAY, 3-WAY & 4-WAY DEBATE)
-    // ----------------------------------------------------------------------------
     function renderBroadcastFrame() {
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, cw, ch);
 
       const isDebateLayout = ['SPLIT', 'TRIPLE', 'QUAD'].includes(currentLayout);
 
-      if (currentLayout === 'FULL_P1') {
+      if (currentLayout === 'FULL_P1') drawPanelBox(1, 0, 0, cw, ch, false);
+      else if (currentLayout === 'FULL_P2') drawPanelBox(2, 0, 0, cw, ch, true);
+      else if (currentLayout === 'FULL_P3') drawPanelBox(3, 0, 0, cw, ch, true);
+      else if (currentLayout === 'FULL_P4') drawPanelBox(4, 0, 0, cw, ch, true);
+      else if (currentLayout === 'PIP') {
         drawPanelBox(1, 0, 0, cw, ch, false);
-      } else if (currentLayout === 'FULL_P2') {
-        drawPanelBox(2, 0, 0, cw, ch, true);
-      } else if (currentLayout === 'FULL_P3') {
-        drawPanelBox(3, 0, 0, cw, ch, true);
-      } else if (currentLayout === 'FULL_P4') {
-        drawPanelBox(4, 0, 0, cw, ch, true);
-      } else if (currentLayout === 'PIP') {
-        drawPanelBox(1, 0, 0, cw, ch, false);
-        const pipW = isVerticalShorts ? 260 : 370;
-        const pipH = isVerticalShorts ? 340 : 215;
+        const pipW = isVerticalShorts ? 260 : 370, pipH = isVerticalShorts ? 340 : 215;
         const corner = document.getElementById('pipCornerSelect').value;
-        let pipX = cw - pipW - 24;
-        let pipY = 64;
+        let pipX = cw - pipW - 24, pipY = 64;
         if (corner === 'TL') { pipX = 24; pipY = 120; }
         if (corner === 'BR') { pipX = cw - pipW - 24; pipY = ch - pipH - 160; }
         if (corner === 'BL') { pipX = 24; pipY = ch - pipH - 160; }
-
         drawPanelBox(2, pipX, pipY, pipW, pipH, true);
         ctx.strokeStyle = activeTheme.primary;
         ctx.lineWidth = 4;
@@ -1498,22 +1259,18 @@
         drawVirtual3DNewsroom(0, 0, cw, ch);
         if (isVerticalShorts) {
           const boxH = 440;
-          drawPanelBox(1, 24, 125, cw - 48, boxH, true);
-          drawPanelBox(2, 24, 140 + boxH, cw - 48, boxH, true);
           [1, 2].forEach((n, idx) => {
             const by = idx === 0 ? 125 : 140 + boxH;
+            drawPanelBox(n, 24, by, cw - 48, boxH, true);
             ctx.strokeStyle = activeSpeaker === n ? '#facc15' : activeTheme.primary;
             ctx.lineWidth = activeSpeaker === n ? 6 : 3;
             ctx.strokeRect(24, by, cw - 48, boxH);
           });
         } else {
-          const boxW = (cw - 64) / 2;
-          const boxY = 126;
-          const boxH = 372;
-          drawPanelBox(1, 24, boxY, boxW, boxH, true);
-          drawPanelBox(2, 40 + boxW, boxY, boxW, boxH, true);
+          const boxW = (cw - 64) / 2, boxY = 126, boxH = 372;
           [1, 2].forEach((n, idx) => {
             const bx = idx === 0 ? 24 : 40 + boxW;
+            drawPanelBox(n, bx, boxY, boxW, boxH, true);
             ctx.strokeStyle = activeSpeaker === n ? '#facc15' : activeTheme.primary;
             ctx.lineWidth = activeSpeaker === n ? 6 : 3;
             ctx.strokeRect(bx, boxY, boxW, boxH);
@@ -1521,9 +1278,7 @@
         }
       } else if (currentLayout === 'TRIPLE') {
         drawVirtual3DNewsroom(0, 0, cw, ch);
-        const boxW = (cw - 80) / 3;
-        const boxY = 126;
-        const boxH = 372;
+        const boxW = (cw - 80) / 3, boxY = 126, boxH = 372;
         [1, 2, 3].forEach((n, idx) => {
           const bx = 20 + idx * (boxW + 20);
           drawPanelBox(n, bx, boxY, boxW, boxH, true);
@@ -1533,13 +1288,10 @@
         });
       } else if (currentLayout === 'QUAD') {
         drawVirtual3DNewsroom(0, 0, cw, ch);
-        const boxW = (cw - 64) / 2;
-        const boxH = 182;
+        const boxW = (cw - 64) / 2, boxH = 182;
         const coords = [
-          { n: 1, x: 24, y: 122 },
-          { n: 2, x: 40 + boxW, y: 122 },
-          { n: 3, x: 24, y: 134 + boxH },
-          { n: 4, x: 40 + boxW, y: 134 + boxH }
+          { n: 1, x: 24, y: 122 }, { n: 2, x: 40 + boxW, y: 122 },
+          { n: 3, x: 24, y: 134 + boxH }, { n: 4, x: 40 + boxW, y: 134 + boxH }
         ];
         coords.forEach(c => {
           drawPanelBox(c.n, c.x, c.y, boxW, boxH, true);
@@ -1549,7 +1301,6 @@
         });
       }
 
-      // DEBATE TOPIC HEADER BANNER & SPEAKER COUNTDOWN CLOCK
       if (isDebateLayout && document.getElementById('chkShowDebateBanner').checked) {
         const topic = document.getElementById('inpDebateTopic').value || '';
         if (topic) {
@@ -1573,14 +1324,10 @@
         }
       }
 
-      // Side Bullet Points Card
       if (document.getElementById('chkShowBullets').checked) {
         const bLines = (document.getElementById('inpBullets').value || '').split('\n').map(s => s.trim()).filter(Boolean);
         if (bLines.length > 0) {
-          const cardW = isVerticalShorts ? cw - 48 : 420;
-          const cardX = isVerticalShorts ? 24 : cw - cardW - 24;
-          const cardY = 130;
-          const cardH = 54 + bLines.length * 46;
+          const cardW = isVerticalShorts ? cw - 48 : 420, cardX = isVerticalShorts ? 24 : cw - cardW - 24, cardY = 130, cardH = 54 + bLines.length * 46;
           ctx.save();
           ctx.fillStyle = 'rgba(9, 13, 22, 0.92)';
           ctx.fillRect(cardX, cardY, cardW, cardH);
@@ -1605,7 +1352,6 @@
         }
       }
 
-      // Top Contact Bar & Clock
       if (document.getElementById('chkShowTopBar').checked) {
         ctx.fillStyle = 'rgba(9, 13, 22, 0.92)';
         ctx.fillRect(0, 0, cw, 40);
@@ -1628,10 +1374,10 @@
         ctx.fillText(`📍 ${locStr} | 🔴 ${nowStr}`, cw - 18, 25);
       }
 
-      // Channel Bug
       if (document.getElementById('chkShowBug').checked) {
         const channelName = document.getElementById('inpChannel').value || 'ABHISHEK DIGITAL NEWS';
-        const anchorName = document.getElementById('inpNameP1').value || 'Abhishek Kumar Sah';
+        const anchorEl = document.getElementById('inpNameP1');
+        const anchorName = anchorEl ? anchorEl.value : 'Abhishek Kumar Sah';
         let textOffsetX = 20;
         if (customLogoImg) {
           ctx.drawImage(customLogoImg, 20, 52, 58, 58);
@@ -1650,13 +1396,11 @@
         ctx.fillText(`🎤 ${anchorName}`, textOffsetX + 8, 103, 270);
       }
 
-      // Live Subtitles Box
       const lowerThirdY = ch - 142;
       if (document.getElementById('chkShowSubtitles').checked) {
         const subText = subtitleMode === 'SPEECH'
           ? (liveSpokenSubtitle || '🎤 बोलिए या Live Pad में माइक दबाएं...')
           : (scriptLines[currentLineIdx] || '');
-
         if (subText) {
           ctx.save();
           ctx.font = isVerticalShorts ? 'bold 20px Noto Sans Devanagari, sans-serif' : 'bold 24px Noto Sans Devanagari, sans-serif';
@@ -1674,7 +1418,6 @@
         }
       }
 
-      // Lower-Third Breaking Headline Bar
       if (document.getElementById('chkShowLowerThird').checked) {
         const badgeText = document.getElementById('inpBadge').value || 'BREAKING NEWS';
         const headlineText = document.getElementById('inpHeadline').value || '';
@@ -1684,7 +1427,6 @@
         ctx.font = '900 16px Inter, sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText('⚡ ' + badgeText, 30, lowerThirdY + 22);
-
         ctx.fillStyle = 'rgba(15, 23, 42, 0.96)';
         ctx.fillRect(20, lowerThirdY + 32, cw - 40, 52);
         ctx.fillStyle = activeTheme.primary;
@@ -1694,7 +1436,6 @@
         ctx.fillText(headlineText, 40, lowerThirdY + 66, cw - 75);
       }
 
-      // Bottom Ticker
       if (document.getElementById('chkShowTicker').checked) {
         const tickY = ch - 44;
         ctx.fillStyle = activeTheme.dark;
@@ -1721,7 +1462,6 @@
         if (tickerX < -tw) tickerX = cw;
       }
 
-      // Telestrator Pen Drawings
       if (penStrokes.length > 0) {
         ctx.save();
         ctx.strokeStyle = '#facc15';
@@ -1738,7 +1478,6 @@
         ctx.restore();
       }
 
-      // Breaking Flash Overlay
       if (Date.now() < breakingFlashUntil) {
         ctx.save();
         const pulse = Math.abs(Math.sin(Date.now() / 120));
@@ -1757,7 +1496,6 @@
         ctx.restore();
       }
 
-      // 5s Countdown Intro
       if (countdownSecLeft > 0) {
         drawVirtual3DNewsroom(0, 0, cw, ch);
         ctx.save();
@@ -1776,7 +1514,6 @@
         ctx.restore();
       }
 
-      // Outro Slate
       if (showOutroSlate) {
         drawVirtual3DNewsroom(0, 0, cw, ch);
         ctx.save();
@@ -1799,9 +1536,6 @@
       requestAnimationFrame(renderBroadcastFrame);
     }
 
-    // ----------------------------------------------------------------------------
-    // 9. UI HELPERS, STORY SLOTS, RECORDING & LIVE STREAMING
-    // ----------------------------------------------------------------------------
     function setLayout(mode) {
       currentLayout = mode;
       document.querySelectorAll('.layout-btn').forEach(btn => {
@@ -1868,7 +1602,7 @@
           ? 'bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded'
           : 'bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded';
       });
-      const savedRaw = localStorage.getItem('ADN_V7_SLOT_' + slotNum);
+      const savedRaw = localStorage.getItem('ADN_V80_SLOT_' + slotNum);
       const data = savedRaw ? JSON.parse(savedRaw) : DEFAULT_STORIES[slotNum];
       document.getElementById('inpBadge').value = data.badge || 'BREAKING NEWS';
       document.getElementById('inpHeadline').value = data.headline || '';
@@ -1879,7 +1613,7 @@
 
     function saveCurrentStorySlot() {
       try {
-        localStorage.setItem('ADN_V7_SLOT_' + activeStorySlot, JSON.stringify({
+        localStorage.setItem('ADN_V80_SLOT_' + activeStorySlot, JSON.stringify({
           badge: document.getElementById('inpBadge').value,
           headline: document.getElementById('inpHeadline').value,
           script: document.getElementById('scriptInput').value
@@ -1992,10 +1726,7 @@
       breakingFlashUntil = Date.now() + 3500;
     });
 
-    document.getElementById('btnOutroSlate').addEventListener('click', () => {
-      showOutroSlate = !showOutroSlate;
-    });
-
+    document.getElementById('btnOutroSlate').addEventListener('click', () => { showOutroSlate = !showOutroSlate; });
     document.getElementById('btnBreakerSound').addEventListener('click', async () => {
       await ensureMasterAudioEngine();
       playCountdownBeep(784, 0.35);
@@ -2057,7 +1788,7 @@
       try {
         wsStreamSocket = new WebSocket(relay.endsWith('/') ? (relay + key) : (relay + '/' + key));
         wsStreamSocket.onopen = async () => {
-          document.getElementById('liveStreamStatus').textContent = '🔴 LIVE CONNECTED: Streaming video to RTMP Bridge...';
+          document.getElementById('liveStreamStatus').textContent = '🔴 LIVE CONNECTED: Streaming to RTMP Bridge...';
           if (!isRecording) await startBroadcastRecording();
         };
         wsStreamSocket.onerror = () => {
@@ -2066,7 +1797,6 @@
       } catch (e) {}
     });
 
-    // Recording Engine
     function getBestSupportedMimeType() {
       const candidates = [
         { mime: 'video/mp4;codecs=avc1,mp4a.40.2', ext: 'mp4' },
@@ -2121,9 +1851,7 @@
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
           recordedChunks.push(e.data);
-          if (wsStreamSocket && wsStreamSocket.readyState === 1) {
-            wsStreamSocket.send(e.data);
-          }
+          if (wsStreamSocket && wsStreamSocket.readyState === 1) wsStreamSocket.send(e.data);
         }
       };
 
@@ -2226,10 +1954,13 @@
       document.getElementById('btnSaveVideo').click();
     });
 
+    // INITIALIZE STUDIO ON LOAD
     window.addEventListener('DOMContentLoaded', () => {
+      buildPanelsControlUI();
       loadStorySlot(1);
       renderBroadcastFrame();
     });
   </script>
 </body>
 </html>
+<!-- ======================== END OF MODULE 4 OF 4 ======================== -->

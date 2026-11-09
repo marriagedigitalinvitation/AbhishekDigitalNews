@@ -1,7 +1,7 @@
 {
   "name": "abhishek-digital-news-studio",
-  "version": "1.0.0",
-  "description": "Abhishek Digital News - Enterprise Broadcast Studio APK",
+  "version": "8.0.0",
+  "description": "Abhishek Digital News - Master PCR Broadcast Studio APK",
   "main": "www/index.html",
   "scripts": {
     "build": "echo 'Static build ready in www/'"
@@ -16,3 +16,4 @@
     "@capacitor/cli": "^6.0.0"
   }
 }
+

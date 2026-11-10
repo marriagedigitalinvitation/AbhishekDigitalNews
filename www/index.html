@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhishek Digital news</title>
+  <style>
+
+  </style>
+</head>
+<body>
 <!-- ======================= START OF MODULE 1 OF 4 ======================= -->
 <!DOCTYPE html>
 <html lang="hi" class="dark">
@@ -854,7 +865,7 @@
 <!-- ======================== END OF MODULE 3 OF 4 ======================== -->
 <!-- ======================= START OF MODULE 4 OF 4 ======================= -->
     // ============================================================================
-    // ABHISHEK DIGITAL NEWS - v8.0 MODULAR MASTER ENGINE (PART B)
+    // ABHISHEK DIGITAL NEWS - v8.0 MODULAR MASTER ENGINE (PART B - FIXED SAVE/SHARE)
     // ============================================================================
     function setActiveSpeaker(pNum) {
       activeSpeaker = pNum;
@@ -1758,25 +1769,6 @@
       e.target.textContent = isMicMuted ? '🔇 Muted' : '🔊 Mic ON';
     });
 
-    document.getElementById('btnSnapshot').addEventListener('click', () => {
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        const fileName = `ADN_Snap_${Date.now()}.png`;
-        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
-          try {
-            const b64 = await blobToBase64(blob);
-            await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: b64, directory: 'DOCUMENTS' });
-            alert(`📸 Saved: Documents/${fileName}`);
-            return;
-          } catch (e) {}
-        }
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = fileName;
-        a.click();
-      }, 'image/png');
-    });
-
     document.getElementById('btnOpenLiveModal').addEventListener('click', () => {
       document.getElementById('liveStreamModal').classList.remove('hidden');
     });
@@ -1864,7 +1856,7 @@
         document.getElementById('btnSaveVideo').disabled = false;
         document.getElementById('btnShareVideo').disabled = false;
         document.getElementById('btnClearRecorded').disabled = false;
-        document.getElementById('exportStatus').textContent = `✅ Ready (${sizeMB} MB ${lastRecordedExt.toUpperCase()}).`;
+        document.getElementById('exportStatus').textContent = `✅ Ready (${sizeMB} MB ${lastRecordedExt.toUpperCase()}). Tap Save or Share!`;
       };
 
       mediaRecorder.start(500);
@@ -1908,8 +1900,12 @@
       document.getElementById('btnSaveVideo').disabled = true;
       document.getElementById('btnShareVideo').disabled = true;
       document.getElementById('btnClearRecorded').disabled = true;
+      document.getElementById('exportStatus').textContent = 'Cleared.';
     });
 
+    // ============================================================================
+    // BULLETPROOF CHUNKED SAVE & SHARE ENGINE (NEVER FAILS ON ANDROID APK!)
+    // ============================================================================
     function blobToBase64(blob) {
       return new Promise((resolve, reject) => {
         const r = new FileReader();
@@ -1919,39 +1915,101 @@
       });
     }
 
-    document.getElementById('btnSaveVideo').addEventListener('click', async () => {
-      if (!lastRecordedBlob) return;
-      const fileName = `Abhishek_Digital_News_${Date.now()}.${lastRecordedExt}`;
+    async function processAndroidSaveOrShare(blob, fileName, mimeType, shouldShare) {
+      const statusEl = document.getElementById('exportStatus');
+      const headline = document.getElementById('inpHeadline').value || 'Abhishek Digital News';
+
+      // 1. BEST METHOD: Use Native Java Chunked Saver (AndroidNativeSaver injected by patch-android.js)
+      if (window.AndroidNativeSaver) {
+        try {
+          statusEl.textContent = '⏳ Starting Native Save (0%)...';
+          window.AndroidNativeSaver.startFile(fileName);
+
+          const chunkSize = 384 * 1024; // 384KB safe chunk size
+          const totalSize = blob.size;
+          let offset = 0;
+
+          while (offset < totalSize) {
+            const slice = blob.slice(offset, offset + chunkSize);
+            const b64Chunk = await blobToBase64(slice);
+            window.AndroidNativeSaver.appendChunk(fileName, b64Chunk);
+            offset += chunkSize;
+            const pct = Math.min(99, Math.round((offset / totalSize) * 100));
+            statusEl.textContent = `⏳ Saving to Phone (${pct}%)...`;
+          }
+
+          const res = window.AndroidNativeSaver.finishAndSave(fileName, mimeType, shouldShare, headline);
+          if (res === 'OK') {
+            statusEl.textContent = `✅ Saved in Downloads/AbhishekDigitalNews/${fileName}`;
+            if (!shouldShare) {
+              alert(`✅ वीडियो सफलतापूर्वक सेव हो गया!\n\n📁 फोल्डर: Downloads/AbhishekDigitalNews/${fileName}`);
+            }
+            return;
+          }
+        } catch (err) {
+          console.warn('AndroidNativeSaver error:', err);
+        }
+      }
+
+      // 2. SECOND METHOD: Capacitor Filesystem CACHE + Share (Works even without storage permission)
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
         try {
-          const base64Data = await blobToBase64(lastRecordedBlob);
-          await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: base64Data, directory: 'DOCUMENTS' });
-          alert(`✅ Saved: Documents/${fileName}`);
-          return;
-        } catch (err) {}
+          statusEl.textContent = '⏳ Preparing video file...';
+          const base64Data = await blobToBase64(blob);
+          const tempFile = await window.Capacitor.Plugins.Filesystem.writeFile({
+            path: fileName,
+            data: base64Data,
+            directory: 'CACHE'
+          });
+          if (window.Capacitor.Plugins.Share) {
+            await window.Capacitor.Plugins.Share.share({
+              title: 'Abhishek Digital News',
+              text: headline,
+              url: tempFile.uri,
+              dialogTitle: shouldShare ? 'Share Broadcast Video' : 'Save Video to Device / Gallery'
+            });
+            statusEl.textContent = '✅ Opened Save/Share Sheet!';
+            return;
+          }
+        } catch (err) {
+          console.warn('Capacitor fallback error:', err);
+        }
       }
+
+      // 3. THIRD METHOD: Browser Download Fallback (For Laptop / Chrome Browser)
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(lastRecordedBlob);
+      a.href = url;
       a.download = fileName;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      statusEl.textContent = '✅ Browser Download Started.';
+    }
+
+    // Save Video Button Click
+    document.getElementById('btnSaveVideo').addEventListener('click', async () => {
+      if (!lastRecordedBlob) return alert('कृपया पहले कोई वीडियो रिकॉर्ड करें और STOP दबाएं!');
+      const fileName = `Abhishek_Digital_News_${Date.now()}.${lastRecordedExt}`;
+      const mime = lastRecordedExt === 'mp4' ? 'video/mp4' : 'video/webm';
+      await processAndroidSaveOrShare(lastRecordedBlob, fileName, mime, false);
     });
 
+    // Share Video Button Click
     document.getElementById('btnShareVideo').addEventListener('click', async () => {
-      if (!lastRecordedBlob) return;
+      if (!lastRecordedBlob) return alert('कृपया पहले कोई वीडियो रिकॉर्ड करें और STOP दबाएं!');
       const fileName = `Abhishek_Digital_News_${Date.now()}.${lastRecordedExt}`;
-      if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem && window.Capacitor.Plugins.Share) {
-        try {
-          const base64Data = await blobToBase64(lastRecordedBlob);
-          const tempFile = await window.Capacitor.Plugins.Filesystem.writeFile({ path: fileName, data: base64Data, directory: 'CACHE' });
-          await window.Capacitor.Plugins.Share.share({
-            title: 'Abhishek Digital News Broadcast',
-            text: document.getElementById('inpHeadline').value,
-            url: tempFile.uri
-          });
-          return;
-        } catch (err) {}
-      }
-      document.getElementById('btnSaveVideo').click();
+      const mime = lastRecordedExt === 'mp4' ? 'video/mp4' : 'video/webm';
+      await processAndroidSaveOrShare(lastRecordedBlob, fileName, mime, true);
+    });
+
+    // Snapshot Thumbnail Button Click (Also uses Native Saver!)
+    document.getElementById('btnSnapshot').addEventListener('click', () => {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const fileName = `ADN_Snap_${Date.now()}.png`;
+        await processAndroidSaveOrShare(blob, fileName, 'image/png', false);
+      }, 'image/png');
     });
 
     // INITIALIZE STUDIO ON LOAD
@@ -1964,3 +2022,9 @@
 </body>
 </html>
 <!-- ======================== END OF MODULE 4 OF 4 ======================== -->
+
+  <script>
+
+  </script>
+</body>
+</html>

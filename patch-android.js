@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-// 1. Patch AndroidManifest.xml with 100% Valid XML Attributes & Full Permissions
+// 1. Patch AndroidManifest.xml with Full Hardware & Storage Permissions
 const manifestPath = path.join(__dirname, 'android/app/src/main/AndroidManifest.xml');
 if (fs.existsSync(manifestPath)) {
   let manifest = fs.readFileSync(manifestPath, 'utf8');
 
   const permissions = `
-    <!-- Broadcast Studio Full Hardware & Network Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -32,7 +31,6 @@ if (fs.existsSync(manifestPath)) {
     manifest = manifest.replace('</manifest>', `${permissions}\n</manifest>`);
   }
 
-  // Enable Hardware Acceleration, Large Heap & Cleartext Traffic for Smooth 60fps Canvas
   if (!manifest.includes('android:largeHeap="true"')) {
     manifest = manifest.replace(
       '<application',
@@ -41,13 +39,10 @@ if (fs.existsSync(manifestPath)) {
   }
 
   fs.writeFileSync(manifestPath, manifest, 'utf8');
-  console.log('✅ AndroidManifest.xml patched cleanly without XML errors.');
-} else {
-  console.error('❌ AndroidManifest.xml not found at:', manifestPath);
-  process.exit(1);
+  console.log('✅ AndroidManifest.xml patched successfully.');
 }
 
-// 2. Patch MainActivity.java with Runtime OS Permissions + WebView Auto-Grant + Native Torch
+// 2. Patch MainActivity.java with Torch Bridge + Native Video Saver & Share Bridge
 const mainActivityPath = path.join(
   __dirname,
   'android/app/src/main/java/com/abhishekdigitalnews/studio/MainActivity.java'
@@ -57,22 +52,34 @@ if (fs.existsSync(mainActivityPath)) {
   const activityCode = `package com.abhishekdigitalnews.studio;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.BridgeWebChromeClient;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,14 +89,9 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Keep Studio Screen Awake during Live Broadcast & Teleprompter reading
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        // 1. Request Android OS Runtime Permissions Immediately
         requestAllStudioPermissions();
 
-        // 2. Configure WebView for Instant Media Play, Torch Bridge & Auto-Grant WebRTC/STT
         if (this.bridge != null && this.bridge.getWebView() != null) {
             WebView webView = this.bridge.getWebView();
             WebSettings settings = webView.getSettings();
@@ -99,10 +101,12 @@ public class MainActivity extends BridgeActivity {
             settings.setAllowFileAccess(true);
             settings.setAllowContentAccess(true);
 
-            // Attach Native Hardware Torch Bridge for Rear LED Flash
+            // 1. Hardware Torch Bridge
             webView.addJavascriptInterface(new NativeTorchBridge(this), "AndroidNativeTorch");
 
-            // Ensure WebView grants Camera, Mic & Speech Recognition requests without failing
+            // 2. Native Video Saver & Share Bridge (Saves directly to Downloads/Gallery)
+            webView.addJavascriptInterface(new NativeFileSaverBridge(this), "AndroidNativeSaver");
+
             webView.setWebChromeClient(new BridgeWebChromeClient(bridge) {
                 @Override
                 public void onPermissionRequest(final PermissionRequest request) {
@@ -143,6 +147,106 @@ public class MainActivity extends BridgeActivity {
         }
     }
 
+    // NATIVE CHUNKED FILE SAVER & WHATSAPP/YOUTUBE SHARER
+    public class NativeFileSaverBridge {
+        private final Context ctx;
+        public NativeFileSaverBridge(Context c) { this.ctx = c; }
+
+        @JavascriptInterface
+        public boolean startFile(String fileName) {
+            try {
+                File temp = new File(ctx.getCacheDir(), fileName);
+                if (temp.exists()) temp.delete();
+                return temp.createNewFile();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public boolean appendChunk(String fileName, String base64Chunk) {
+            try {
+                File temp = new File(ctx.getCacheDir(), fileName);
+                byte[] bytes = Base64.decode(base64Chunk, Base64.DEFAULT);
+                FileOutputStream fos = new FileOutputStream(temp, true);
+                fos.write(bytes);
+                fos.close();
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public String finishAndSave(String fileName, String mimeType, boolean shareNow, String shareTitle) {
+            try {
+                File temp = new File(ctx.getCacheDir(), fileName);
+                if (!temp.exists()) return "ERROR: Temp file missing";
+
+                Uri savedUri = null;
+                ContentResolver resolver = ctx.getContentResolver();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+                    values.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/AbhishekDigitalNews");
+
+                    savedUri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                    if (savedUri != null) {
+                        OutputStream os = resolver.openOutputStream(savedUri);
+                        FileInputStream fis = new FileInputStream(temp);
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = fis.read(buffer)) != -1) {
+                            os.write(buffer, 0, len);
+                        }
+                        fis.close();
+                        os.flush();
+                        os.close();
+                    }
+                } else {
+                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "AbhishekDigitalNews");
+                    if (!dir.exists()) dir.mkdirs();
+                    File outFile = new File(dir, fileName);
+                    FileInputStream fis = new FileInputStream(temp);
+                    FileOutputStream fos = new FileOutputStream(outFile);
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = fis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fis.close();
+                    fos.flush();
+                    fos.close();
+                    MediaScannerConnection.scanFile(ctx, new String[]{outFile.getAbsolutePath()}, new String[]{mimeType}, null);
+                    savedUri = Uri.fromFile(outFile);
+                }
+
+                final Uri finalUri = savedUri;
+                runOnUiThread(() -> {
+                    Toast.makeText(ctx, "Saved to Downloads/AbhishekDigitalNews/" + fileName, Toast.LENGTH_LONG).show();
+                    if (shareNow && finalUri != null) {
+                        try {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType(mimeType);
+                            shareIntent.putExtra(Intent.EXTRA_STREAM, finalUri);
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, shareTitle);
+                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            ctx.startActivity(Intent.createChooser(shareIntent, "Share Broadcast Video"));
+                        } catch (Exception ex) {
+                            Toast.makeText(ctx, "Share Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                return "OK";
+            } catch (Exception e) {
+                return "ERROR: " + e.getMessage();
+            }
+        }
+    }
+
     private void requestAllStudioPermissions() {
         List<String> perms = new ArrayList<>();
         perms.add(Manifest.permission.CAMERA);
@@ -171,8 +275,5 @@ public class MainActivity extends BridgeActivity {
 }
 `;
   fs.writeFileSync(mainActivityPath, activityCode, 'utf8');
-  console.log('✅ MainActivity.java patched with WebChromeClient Auto-Grant & NativeTorchBridge.');
-} else {
-  console.error('❌ MainActivity.java not found at:', mainActivityPath);
-  process.exit(1);
+  console.log('✅ MainActivity.java patched with NativeFileSaverBridge.');
 }
